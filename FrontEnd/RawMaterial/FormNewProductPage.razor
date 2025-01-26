@@ -1,0 +1,60 @@
+﻿@page "/product/new"
+@using System.ComponentModel.DataAnnotations
+@using FrontEnd.models
+
+<h3>Cadastro de novo produto</h3>
+
+<EditForm Model="@novaMateria" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="First name" HelperText="Min. 4 characters"
+                                  @bind-Value="novaMateria.Name" For="@(() => novaMateria.Name)" />
+                    <MudTextField Label="Description" Class="mt-3"
+                                  @bind-Value="novaMateria.Description" For="@(() => novaMateria.Description)" />
+                    <MudTextField Label="Amount" HelperText="Adicione uma quantidade dessa materia prima" Class="mt-3"
+                                  @bind-Value="novaMateria.Amount" For="@(() => novaMateria.Amount)" InputType="InputType.Number"/>
+                    <MudTextField Label="Validade" HelperText="Qual a data de validade desse produto" Class="mt-3"
+                                  @bind-Value="novaMateria.Expiration" For="@(() => novaMateria.Expiration)" InputType="InputType.Date" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Register</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="5">
+            <MudPaper Class="pa-4 mud-height-full">
+                <MudText Typo="Typo.subtitle2">Validation Summary</MudText>
+                @if (success)
+                {
+                    <MudText Color="Color.Success">Success</MudText>
+                }
+                else
+                {
+                    <MudText Color="@Color.Error">
+                        <ValidationSummary />
+                    </MudText>
+                }
+            </MudPaper>
+        </MudItem>
+        <MudItem xs="12">
+            <MudText Typo="Typo.body2" Align="Align.Center">
+                texto legenda da tabela
+            </MudText>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+@code {
+    RawMaterial novaMateria = new RawMaterial();
+    
+    bool success;
+
+    private void OnValidSubmit(EditContext context)
+    {
+        success = true;
+        StateHasChanged();
+    }
+
+}
