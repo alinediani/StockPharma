@@ -10,5 +10,7 @@ namespace Core.Repositories
     public interface IRawMaterialRepository
     {
         Task<List<RawMaterialEntity>> GetAllAsync();
+        Task AddAsync(RawMaterialEntity entity);
+        Task<RawMaterialEntity> GetByIdAsync(int id);
     }
 }
