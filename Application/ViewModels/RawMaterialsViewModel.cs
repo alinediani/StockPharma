@@ -8,7 +8,7 @@ namespace Application.ViewModels
 {
     public class RawMaterialsViewModel
     {
-        public RawMaterialsViewModel(int id,string name, string description, string supplierId, float amount, int uoM, string expiration)
+        public RawMaterialsViewModel(int id,string name, string description, string supplierId, float amount, int uoM, DateTime expiration)
         {
             Id = id;
             Name = name;
@@ -24,6 +24,6 @@ namespace Application.ViewModels
         public string SupplierId { get; set; }
         public float Amount { get; set; }
         public int UoM { get; set; }
-        public string Expiration { get; set; }
+        public DateTime Expiration { get; set; }
     }
 }

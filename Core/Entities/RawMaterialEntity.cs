@@ -8,7 +8,7 @@ namespace Core.Entities
 {
     public class RawMaterialEntity : BaseEntity
     {
-        public RawMaterialEntity(string name, string description, string supplierId, float amount, int uoM, string expiration)
+        public RawMaterialEntity(string name, string description, string supplierId, float amount, int uoM, DateTime expiration)
         {
             Name = name;
             Description = description;
@@ -23,6 +23,6 @@ namespace Core.Entities
         public string SupplierId { get; set; }
         public float Amount { get; set; }
         public int UoM { get; set; }
-        public string Expiration { get; set; }
+        public DateTime Expiration { get; set; }
     }
 }

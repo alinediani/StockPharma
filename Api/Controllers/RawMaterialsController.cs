@@ -27,7 +27,7 @@ namespace Api.Controllers
             return Ok(rawMaterials);
         }
 
-        [HttpPost]
+        [HttpPost("/RawMaterials/new")]
         public async Task<IActionResult> Post([FromBody] CreateRawMaterialCommand command)
         {
             var id = await _mediator.Send(command);
@@ -48,6 +48,29 @@ namespace Api.Controllers
             }
 
             return Ok(rawMaterial);
+        }
+
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateRawMaterialCommand command)
+        {
+            if (command.Description.Length > 200)
+            {
+                return BadRequest();
+            }
+
+            await _mediator.Send(command);
+
+            return NoContent();
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var command = new DeleteRawMaterialCommand(id);
+
+            await _mediator.Send(command);
+
+            return NoContent();
         }
 
     }

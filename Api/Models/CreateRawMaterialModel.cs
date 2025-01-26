@@ -8,6 +8,6 @@
         public string SupplierId { get; set; }
         public float Amount { get; set; }
         public int UoM { get; set; }
-        public string Expiration { get; set; }
+        public DateTime Expiration { get; set; }
     }
 }

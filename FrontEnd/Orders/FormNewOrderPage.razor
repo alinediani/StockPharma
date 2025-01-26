@@ -1,0 +1,90 @@
+﻿@page "/Orders/new"
+
+@using System.ComponentModel.DataAnnotations
+@using FrontEnd.Models
+@inject HttpClient httpClient
+
+<h3>Cadastro de Novo Pedido</h3>
+
+<EditForm Model="@newOrder" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <!-- Autocomplete para Cliente -->
+                    <MudAutocomplete T="Client" Label="Cliente" Placeholder="Selecione um cliente"
+                                     @bind-Value="newOrder.Client" Items="@clients"
+                                     ToStringFunc="@(client => client?.Name)" />
+
+                    <!-- Adicione seus produtos manualmente, sem MudSelect -->
+                    <MudTextField Label="Produtos (digite os produtos manualmente)" @bind-Value="productsInput" />
+
+                    <MudTextField Label="Data de Criação" @bind-Value="newOrder.CreatedDate" InputType="InputType.Date" />
+                    <MudTextField Label="Valor Total" @bind-Value="newOrder.TotalValue" InputType="InputType.Number" Disabled />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
+                        Cadastrar
+                    </MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="5">
+            <MudPaper Class="pa-4 mud-height-full">
+                <MudText Typo="Typo.subtitle2">Resumo</MudText>
+                <MudText>Cliente: @newOrder.Client?.Name</MudText>
+                <MudText>Produtos:</MudText>
+                <ul>
+                    <!-- Lista de produtos selecionados -->
+                    @foreach (var product in selectedProducts)
+                    {
+                        <li>@product.Name (@product.Price)</li>
+                    }
+                </ul>
+                <MudText>Valor Total: R$ @newOrder.TotalValue.ToString("F2")</MudText>
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+@code {
+    private Order newOrder = new Order { CreatedDate = DateTime.Now };
+    private List<Client> clients = new();
+    private List<Product> products = new();
+    private List<Product> selectedProducts = new();
+    private string productsInput = string.Empty;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Carrega clientes e produtos da API
+        clients = await httpClient.GetFromJsonAsync<List<Client>>("https://localhost:7008/Clients/all");
+        products = await httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7008/Products/all");
+    }
+
+    private void OnSelectedProductsChanged()
+    {
+        // Aqui, manualmente, você pode adicionar os produtos selecionados ao pedido
+        // para fins de simplificação. Caso queira adicionar manualmente, modifique o fluxo.
+        selectedProducts = products.Where(p => p.Name.Contains(productsInput)).ToList();
+        newOrder.TotalValue = selectedProducts.Sum(p => p.Price); // Atualiza o valor total
+    }
+
+    private async Task OnValidSubmit()
+    {
+        // Calcula o valor total
+        newOrder.Products = selectedProducts;
+        newOrder.TotalValue = selectedProducts.Sum(p => p.Price);
+
+        var response = await httpClient.PostAsJsonAsync("https://localhost:7008/Orders/new", newOrder);
+
+        if (response.IsSuccessStatusCode)
+        {
+            Console.WriteLine("Pedido cadastrado com sucesso!");
+        }
+        else
+        {
+            Console.WriteLine("Erro ao cadastrar o pedido.");
+        }
+    }
+}

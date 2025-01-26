@@ -1,25 +1,24 @@
-﻿@page "/RawMaterials/new"
+﻿@page "/Products/new"
 @using System.ComponentModel.DataAnnotations
 @using FrontEnd.Models
 @inject HttpClient httpClient
 
 <h3>Cadastro de novo produto</h3>
 
-<EditForm Model="@novaMateria" OnValidSubmit="OnValidSubmit">
+<EditForm Model="@newProduct" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudGrid>
         <MudItem xs="12" sm="7">
             <MudCard>
                 <MudCardContent>
-                    <MudTextField Label="Id" HelperText="Código do fornecedor"
-                                  @bind-Value="novaMateria.SupplierId" For="@(() => novaMateria.SupplierId)" />
                     <MudTextField Label="Nome" HelperText="Min. 4 caracteres"
-                                  @bind-Value="novaMateria.Name" For="@(() => novaMateria.Name)" />
+                                  @bind-Value="newProduct.Name" For="@(() => newProduct.Name)" />
                     <MudTextField Label="Descrição" Class="mt-3"
-                                  @bind-Value="novaMateria.Description" For="@(() => novaMateria.Description)" />
-                    <MudTextField Label="Quantidade" HelperText="Adicione uma quantidade dessa matéria prima" Class="mt-3"
-                                  @bind-Value="novaMateria.Amount" For="@(() => novaMateria.Amount)" InputType="InputType.Number" />
- 
+                                  @bind-Value="newProduct.Description" For="@(() => newProduct.Description)" />
+                    <MudTextField Label="Quantidade" HelperText="Adicione a quantidade desse produto" Class="mt-3"
+                                  @bind-Value="newProduct.Amount" For="@(() => newProduct.Amount)" InputType="InputType.Number" />
+                    <MudTextField Label="Preço" HelperText="Adicione o valor do produto" Class="mt-3"
+                                  @bind-Value="newProduct.Price" For="@(() => newProduct.Price)" InputType="InputType.Number" />
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Cadastrar</MudButton>
@@ -28,7 +27,6 @@
         </MudItem>
         <MudItem xs="12" sm="5">
             <MudPaper Class="pa-4 mud-height-full">
-                <MudDatePicker Label="Data de validade" Editable="true" @bind-Date="novaMateria.Expiration" Placeholder="Selecione a data de validade" />
                 <MudText Typo="Typo.subtitle2">Resumo de Validação</MudText>
                 @if (success)
                 {
@@ -51,7 +49,7 @@
 </EditForm>
 
 @code {
-    RawMaterial novaMateria = new RawMaterial();
+    Product newProduct = new Product();
 
     bool success;
     bool error;
@@ -63,22 +61,22 @@
 
         try
         {
-            var response = await httpClient.PostAsJsonAsync("https://localhost:7008/RawMaterials/new", novaMateria);
+            var response = await httpClient.PostAsJsonAsync("https://localhost:7008/RawMaterials/new", newProduct);
 
             if (response.IsSuccessStatusCode)
             {
-                success = true; 
+                success = true;
             }
             else
             {
-                error = true; 
+                error = true;
             }
         }
         catch (Exception)
         {
-            error = true; 
+            error = true;
         }
 
-        StateHasChanged(); 
+        StateHasChanged();
     }
 }

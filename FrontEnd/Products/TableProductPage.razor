@@ -1,10 +1,10 @@
-﻿@page "/RawMaterials/all"
+﻿@page "/Products/all"
 
 @using FrontEnd.Models
 @using System.Net.Http.Json
 @inject HttpClient httpClient
 
-<MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<RawMaterial, bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
+<MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Product, bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Materias primas</MudText>
         <MudSpacer />
@@ -13,16 +13,14 @@
     <HeaderContent>
         <MudTh>Nome</MudTh>
         <MudTh>Descrição</MudTh>
-        <MudTh>Fornecedor</MudTh>
-        <MudTh>Validade</MudTh>
+        <MudTh>Preço</MudTh>
         <MudTh>Quantidade</MudTh>
         <MudTh>Ações</MudTh>
     </HeaderContent>
     <RowTemplate>
         <MudTd DataLabel="Name">@context.Name</MudTd>
         <MudTd DataLabel="Descrição">@context.Description</MudTd>
-        <MudTd DataLabel="Fornecedor">@context.SupplierId</MudTd>
-        <MudTd DataLabel="Validade">@context.Expiration</MudTd>
+        <MudTd DataLabel="Fornecedor">@context.Price</MudTd>
         <MudTd DataLabel="Quantidade">@context.Amount</MudTd>
         <MudTd DataLabel=""><MudButton>Editar</MudButton></MudTd>
         <MudTd DataLabel=""><MudButton>Deletar</MudButton></MudTd>
@@ -50,26 +48,26 @@
     private bool bordered = false;
     private string searchString1 = "";
 
-    private RawMaterial selectedItem1 = null;
-    private HashSet<RawMaterial> selectedItems = new HashSet<RawMaterial>();
+    private Product selectedItem1 = null;
+    private HashSet<Product> selectedItems = new HashSet<Product>();
 
-    private IEnumerable<RawMaterial> Elements = new List<RawMaterial>();
+    private IEnumerable<Product> Elements = new List<Product>();
 
     protected override async Task OnInitializedAsync()
     {
-        Elements = await httpClient.GetFromJsonAsync<List<RawMaterial>>("https://localhost:7008/api/RawMaterials?query=teste'");
+        Elements = new List<Product>();
 
         if (Elements == null)
         {
-            Elements = new List<RawMaterial>();
+            Elements = new List<Product>();
         }
     }
 
 
-    private bool FilterFunc1(RawMaterial element) => FilterFunc(element, searchString1);
+    private bool FilterFunc1(Product element) => FilterFunc(element, searchString1);
 
-    
-    private bool FilterFunc(RawMaterial element, string searchString)
+
+    private bool FilterFunc(Product element, string searchString)
     {
         if (element == null)
             return false;
@@ -83,7 +81,7 @@
         if (element.Description != null && element.Description.Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
 
-        if (element.SupplierId != null && element.SupplierId.Contains(searchString, StringComparison.OrdinalIgnoreCase))
+        if (element.Price != null && element.Price.ToString().Contains(searchString, StringComparison.OrdinalIgnoreCase))
             return true;
 
         return false;

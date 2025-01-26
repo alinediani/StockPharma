@@ -1,0 +1,87 @@
+﻿@page "/Client/all"
+
+@using FrontEnd.Models
+@using System.Net.Http.Json
+@inject HttpClient httpClient
+
+<MudTable Items="@Clients" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Client, bool>(FilterFunc1)" @bind-SelectedItem="selectedClient">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Lista de Clientes</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Pesquisar" Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>Nome</MudTh>
+        <MudTh>CPF</MudTh>
+        <MudTh>Endereço</MudTh>
+        <MudTh>Telefone</MudTh>
+        <MudTh>Email</MudTh>
+        <MudTh>Ações</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="Nome">@context.Name</MudTd>
+        <MudTd DataLabel="CPF">@context.Cpf</MudTd>
+        <MudTd DataLabel="Endereço">@context.Address</MudTd>
+        <MudTd DataLabel="Telefone">@context.PhoneNumber</MudTd>
+        <MudTd DataLabel="Email">@context.Email</MudTd>
+        <MudTd DataLabel="Ações">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mr-2">Editar</MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Error">Deletar</MudButton>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+<div class="d-flex flex-wrap mt-4">
+    <MudSwitch @bind-Value="hover" Color="Color.Primary">Hover</MudSwitch>
+    <MudSwitch @bind-Value="dense" Color="Color.Secondary">Dense</MudSwitch>
+    <MudSwitch @bind-Value="striped" Color="Color.Tertiary">Striped</MudSwitch>
+    <MudSwitch @bind-Value="bordered" Color="Color.Warning">Bordered</MudSwitch>
+    <MudSpacer />
+    <div style="min-width:200px;">
+        <MudText Class="align-self-center d-inline">Selecionado: @selectedClient?.Name</MudText>
+    </div>
+</div>
+
+@code {
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = false;
+    private bool bordered = false;
+    private string searchString = "";
+
+    private Client selectedClient = null;
+    private IEnumerable<Client> Clients = new List<Client>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            Clients = await httpClient.GetFromJsonAsync<IEnumerable<Client>>("https://localhost:7008/Clients/all");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao carregar clientes: {ex.Message}");
+            Clients = new List<Client>();
+        }
+    }
+
+    private bool FilterFunc1(Client client) => FilterFunc(client, searchString);
+
+    private bool FilterFunc(Client client, string searchString)
+    {
+        if (client == null)
+            return false;
+
+        if (string.IsNullOrWhiteSpace(searchString))
+            return true;
+
+        return (client.Name?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false) ||
+               (client.Cpf?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false) ||
+               (client.Address?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false) ||
+               (client.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false) ||
+               (client.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false);
+    }
+}

@@ -1,0 +1,83 @@
+﻿@page "/Client/new"
+@using System.ComponentModel.DataAnnotations
+@using FrontEnd.Models
+@inject HttpClient httpClient
+
+<h3>Cadastro de Novo Cliente</h3>
+
+<EditForm Model="@newClient" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Nome" HelperText="Digite o nome completo"
+                                  @bind-Value="newClient.Name" />
+                    <MudTextField Label="CPF" HelperText="Formato: 000.000.000-00" Class="mt-3"
+                                  @bind-Value="newClient.Cpf" />
+                    <MudTextField Label="Endereço" HelperText="Digite o endereço completo" Class="mt-3"
+                                  @bind-Value="newClient.Address" />
+                    <MudTextField Label="Telefone" HelperText="Digite um número válido" Class="mt-3"
+                                  @bind-Value="newClient.PhoneNumber" />
+                    <MudTextField Label="E-mail" HelperText="Digite um e-mail válido" Class="mt-3"
+                                  @bind-Value="newClient.Email" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Cadastrar</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+        <MudItem xs="12" sm="5">
+            <MudPaper Class="pa-4 mud-height-full">
+                <MudText Typo="Typo.subtitle2">Resumo de Validação</MudText>
+                @if (success)
+                {
+                    <MudText Color="Color.Success">Cliente cadastrado com sucesso!</MudText>
+                }
+                else if (error)
+                {
+                    <MudText Color="Color.Error">Ocorreu um erro ao cadastrar o cliente.</MudText>
+                }
+                else
+                {
+                    <MudText Color="Color.Error">
+                        <ValidationSummary />
+                    </MudText>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+@code {
+    Client newClient = new Client();
+
+    bool success;
+    bool error;
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        success = false;
+        error = false;
+
+        try
+        {
+            var response = await httpClient.PostAsJsonAsync("https://localhost:7008/Clients/new", newClient);
+
+            if (response.IsSuccessStatusCode)
+            {
+                success = true;
+            }
+            else
+            {
+                error = true;
+            }
+        }
+        catch (Exception)
+        {
+            error = true;
+        }
+
+        StateHasChanged();
+    }
+}

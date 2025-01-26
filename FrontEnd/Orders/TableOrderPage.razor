@@ -1,0 +1,71 @@
+﻿@page "/Orders/all"
+
+@using FrontEnd.Models
+@inject HttpClient httpClient
+
+<MudTable Items="@orders" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped">
+    <ToolBarContent>
+        <MudText Typo="Typo.h6">Lista de Pedidos</MudText>
+        <MudSpacer />
+        <MudTextField @bind-Value="searchString" Placeholder="Pesquisar por Cliente ou Produto"
+                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+                      IconSize="Size.Medium" Class="mt-0"></MudTextField>
+    </ToolBarContent>
+    <HeaderContent>
+        <MudTh>ID</MudTh>
+        <MudTh>Cliente</MudTh>
+        <MudTh>Data de Criação</MudTh>
+        <MudTh>Valor Total</MudTh>
+        <MudTh>Produtos</MudTh>
+        <MudTh>Ações</MudTh>
+    </HeaderContent>
+    <RowTemplate>
+        <MudTd DataLabel="ID">@context.Id</MudTd>
+        <MudTd DataLabel="Cliente">@context.Client?.Name</MudTd>
+        <MudTd DataLabel="Data de Criação">@context.CreatedDate.ToShortDateString()</MudTd>
+        <MudTd DataLabel="Valor Total">R$ @context.TotalValue.ToString("F2")</MudTd>
+        <MudTd DataLabel="Produtos">
+            <ul>
+                @foreach (var product in context.Products)
+                {
+                    <li>@product.Name</li>
+                }
+            </ul>
+        </MudTd>
+        <MudTd DataLabel="Ações">
+            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mr-2">Editar</MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Error">Deletar</MudButton>
+        </MudTd>
+    </RowTemplate>
+    <PagerContent>
+        <MudTablePager />
+    </PagerContent>
+</MudTable>
+
+<div class="d-flex flex-wrap mt-4">
+    <MudSwitch @bind-Value="hover" Color="Color.Primary">Hover</MudSwitch>
+    <MudSwitch @bind-Value="dense" Color="Color.Secondary">Dense</MudSwitch>
+    <MudSwitch @bind-Value="striped" Color="Color.Tertiary">Striped</MudSwitch>
+    <MudSwitch @bind-Value="bordered" Color="Color.Warning">Bordered</MudSwitch>
+</div>
+
+@code {
+    private List<Order> orders = new();
+    private bool dense = false;
+    private bool hover = true;
+    private bool striped = false;
+    private bool bordered = false;
+    private string searchString = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            orders = await httpClient.GetFromJsonAsync<List<Order>>("https://localhost:7008/Orders/all");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Erro ao carregar pedidos: {ex.Message}");
+        }
+    }
+}
