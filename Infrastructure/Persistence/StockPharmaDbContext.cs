@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Core.Entities;
+using System.Reflection;
 
 namespace Infrastructure.Persistence
 {
@@ -15,5 +16,9 @@ namespace Infrastructure.Persistence
 
         }
         public DbSet<RawMaterialEntity> RawMaterials { get; set; }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        }
     }
 }

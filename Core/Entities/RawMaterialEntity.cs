@@ -8,13 +8,13 @@ namespace Core.Entities
 {
     public class RawMaterialEntity : BaseEntity
     {
-        public RawMaterialEntity(string name, string description, string supplier, float amount, int uom, string expiration)
+        public RawMaterialEntity(string name, string description, string supplierId, float amount, int uoM, string expiration)
         {
             Name = name;
             Description = description;
-            SupplierId = supplier;
+            SupplierId = supplierId;
             Amount = amount;
-            UoM = uom;
+            UoM = uoM;
             Expiration = expiration;
         }
 
