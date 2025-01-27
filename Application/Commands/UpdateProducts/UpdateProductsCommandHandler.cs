@@ -22,15 +22,14 @@ namespace Application.Commands.UpdateProduct
 
             if (product == null)
             {
-                throw new InvalidOperationException("Raw material not found.");
+                throw new InvalidOperationException("Product not found.");
             }
 
             product.Name = request.Name;
             product.Description = request.Description;
-            product.SupplierId = request.SupplierId;
+            product.RawMaterial = request.RawMaterial;
+            product.Price = request.Price;
             product.Amount = request.Amount;
-            product.UoM = request.UoM;
-            product.Expiration = request.Expiration;
 
             await _productRepository.UpdateAsync(product);
 

@@ -22,15 +22,14 @@ namespace Application.Commands.UpdateOrder
 
             if (order == null)
             {
-                throw new InvalidOperationException("Raw material not found.");
+                throw new InvalidOperationException("Order not found.");
             }
 
-            order.Name = request.Name;
-            order.Description = request.Description;
-            order.SupplierId = request.SupplierId;
+            order.Client = request.Client;
+            order.Products = request.Products;
             order.Amount = request.Amount;
-            order.UoM = request.UoM;
-            order.Expiration = request.Expiration;
+            order.OrderDate = request.OrderDate;
+            order.TotalCoast = request.TotalCoast;
 
             await _orderRepository.UpdateAsync(order);
 
