@@ -6,33 +6,33 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Repositories;
 
-namespace Application.Commands.UpdateRawMaterial
+namespace Application.Commands.UpdateOrder
 {
-    public class UpdateProductsCommandHandler : IRequestHandler<UpdateProductsCommand, Unit>
+    public class UpdateOrderCommandHandler : IRequestHandler<UpdateOrderCommand, Unit>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public UpdateProductsCommandHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IOrderRepository _orderRepository;
+        public UpdateOrderCommandHandler(IOrderRepository orderRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _orderRepository = orderRepository;
         }
 
-        public async Task<Unit> Handle(UpdateProductsCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateOrderCommand request, CancellationToken cancellationToken)
         {
-            var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.Id);
+            var order = await _orderRepository.GetByIdAsync(request.Id);
 
-            if (rawMaterial == null)
+            if (order == null)
             {
                 throw new InvalidOperationException("Raw material not found.");
             }
 
-            rawMaterial.Name = request.Name;
-            rawMaterial.Description = request.Description;
-            rawMaterial.SupplierId = request.SupplierId;
-            rawMaterial.Amount = request.Amount;
-            rawMaterial.UoM = request.UoM;
-            rawMaterial.Expiration = request.Expiration;
+            order.Name = request.Name;
+            order.Description = request.Description;
+            order.SupplierId = request.SupplierId;
+            order.Amount = request.Amount;
+            order.UoM = request.UoM;
+            order.Expiration = request.Expiration;
 
-            await _rawMaterialRepository.UpdateAsync(rawMaterial);
+            await _orderRepository.UpdateAsync(order);
 
             return Unit.Value;
         }

@@ -6,33 +6,33 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Repositories;
 
-namespace Application.Commands.UpdateRawMaterial
+namespace Application.Commands.UpdateProduct
 {
     public class UpdateProductsCommandHandler : IRequestHandler<UpdateProductsCommand, Unit>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public UpdateProductsCommandHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IProductRepository _productRepository;
+        public UpdateProductsCommandHandler(IProductRepository productRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<Unit> Handle(UpdateProductsCommand request, CancellationToken cancellationToken)
         {
-            var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.Id);
+            var product = await _productRepository.GetByIdAsync(request.Id);
 
-            if (rawMaterial == null)
+            if (product == null)
             {
                 throw new InvalidOperationException("Raw material not found.");
             }
 
-            rawMaterial.Name = request.Name;
-            rawMaterial.Description = request.Description;
-            rawMaterial.SupplierId = request.SupplierId;
-            rawMaterial.Amount = request.Amount;
-            rawMaterial.UoM = request.UoM;
-            rawMaterial.Expiration = request.Expiration;
+            product.Name = request.Name;
+            product.Description = request.Description;
+            product.SupplierId = request.SupplierId;
+            product.Amount = request.Amount;
+            product.UoM = request.UoM;
+            product.Expiration = request.Expiration;
 
-            await _rawMaterialRepository.UpdateAsync(rawMaterial);
+            await _productRepository.UpdateAsync(product);
 
             return Unit.Value;
         }

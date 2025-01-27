@@ -8,15 +8,15 @@ using Core.Repositories;
 
 namespace Application.Commands.UpdateRawMaterial
 {
-    public class UpdateProductsCommandHandler : IRequestHandler<UpdateProductsCommand, Unit>
+    public class UpdateRawMaterialsCommandHandler : IRequestHandler<UpdateRawMaterialsCommand, Unit>
     {
         private readonly IRawMaterialRepository _rawMaterialRepository;
-        public UpdateProductsCommandHandler(IRawMaterialRepository rawMaterialRepository)
+        public UpdateRawMaterialsCommandHandler(IRawMaterialRepository rawMaterialRepository)
         {
             _rawMaterialRepository = rawMaterialRepository;
         }
 
-        public async Task<Unit> Handle(UpdateProductsCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateRawMaterialsCommand request, CancellationToken cancellationToken)
         {
             var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.Id);
 

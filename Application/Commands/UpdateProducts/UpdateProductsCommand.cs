@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Commands.UpdateRawMaterial
+namespace Application.Commands.UpdateProduct
 {
     public class UpdateProductsCommand : IRequest<Unit>
     {

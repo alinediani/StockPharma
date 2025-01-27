@@ -6,21 +6,21 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Repositories;
 
-namespace Application.Commands.DeleteRawMaterial
+namespace Application.Commands.DeleteOrder
 {
-    public class DeleteProductsCommandHandler : IRequestHandler<DeleteProductsCommand, Unit>
+    public class DeleteOrdersCommandHandler : IRequestHandler<DeleteOrderCommand, Unit>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public DeleteProductsCommandHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IOrderRepository _orderRepository;
+        public DeleteOrdersCommandHandler(IOrderRepository orderRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _orderRepository = orderRepository;
         }
 
-        public async Task<Unit> Handle(DeleteProductsCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteOrderCommand request, CancellationToken cancellationToken)
         {
-            var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.Id);
+            var order = await _orderRepository.GetByIdAsync(request.Id);
 
-            await _rawMaterialRepository.DeleteAsync(request.Id);
+            await _orderRepository.DeleteAsync(request.Id);
 
             return Unit.Value;
         }

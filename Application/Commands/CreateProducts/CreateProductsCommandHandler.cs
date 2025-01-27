@@ -3,27 +3,28 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Commands.CreateProducts;
 using Core.Entities;
 using Core.Repositories;
 using MediatR;
 
-namespace Application.Commands.CreateRawMaterial
+namespace Application.Commands.CreateProduct
 {
-    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, int>
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductsCommand, int>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public CreateClientCommandHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IProductRepository _productRepository;
+        public CreateProductCommandHandler(IProductRepository productRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _productRepository = productRepository;
         }
 
-        public async Task<int> Handle(CreateClientCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateProductsCommand request, CancellationToken cancellationToken)
         {
-            var rawMaterial = new RawMaterialEntity(request.Name, request.Description, request.SupplierId, request.Amount, request.UoM, request.Expiration);
+            var product = new ProductEntity(request.Name, request.Description, request.SupplierId, request.Amount, request.UoM, request.Expiration);
 
-            await _rawMaterialRepository.AddAsync(rawMaterial);
+            await _productRepository.AddAsync(product);
 
-            return rawMaterial.Id;
+            return product.Id;
         }
     }
 }

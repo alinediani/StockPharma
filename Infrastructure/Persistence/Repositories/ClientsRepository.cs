@@ -10,25 +10,25 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Infrastructure.Persistence.Repositories
 {
-    public class RawMaterialRepository : IRawMaterialRepository
+    public class ClientRepository : IClientRepository
     {
         private readonly StockPharmaDbContext _dbContext;
         private readonly string _connectionString;
-        public RawMaterialRepository(StockPharmaDbContext dbContext, IConfiguration configuration)
+        public ClientRepository(StockPharmaDbContext dbContext, IConfiguration configuration)
         {
             _dbContext = dbContext;
             _connectionString = configuration.GetConnectionString("StockPharmaCs");
         }
 
-        public async Task<List<RawMaterialEntity>> GetAllAsync()
+        public async Task<List<ClientEntity>> GetAllAsync()
         {
-            return await _dbContext.RawMaterials.ToListAsync();
+            return await _dbContext.Clients.ToListAsync();
         }
 
 
-        public async Task AddAsync(RawMaterialEntity rawMaterial)
+        public async Task AddAsync(ClientEntity rawMaterial)
         {
-            await _dbContext.RawMaterials.AddAsync(rawMaterial);
+            await _dbContext.Clients.AddAsync(rawMaterial);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -38,24 +38,24 @@ namespace Infrastructure.Persistence.Repositories
             await _dbContext.SaveChangesAsync();
         }
 
-        public async Task<RawMaterialEntity> GetByIdAsync(int id)
+        public async Task<ClientEntity> GetByIdAsync(int id)
         {
-            return await _dbContext.RawMaterials.SingleOrDefaultAsync(p => p.Id == id);
+            return await _dbContext.Clients.SingleOrDefaultAsync(p => p.Id == id);
         }
-        public async Task UpdateAsync(RawMaterialEntity rawMaterial)
+        public async Task UpdateAsync(ClientEntity rawMaterial)
         {
-            var existingRawMaterial = await _dbContext.RawMaterials
+            var existingClient = await _dbContext.Clients
                                                       .SingleOrDefaultAsync(p => p.Id == rawMaterial.Id);
-            if (existingRawMaterial != null)
+            if (existingClient != null)
             {
-                existingRawMaterial.Name = rawMaterial.Name;
-                existingRawMaterial.Description = rawMaterial.Description;
-                existingRawMaterial.SupplierId = rawMaterial.SupplierId;
-                existingRawMaterial.Amount = rawMaterial.Amount;
-                existingRawMaterial.UoM = rawMaterial.UoM;
-                existingRawMaterial.Expiration = rawMaterial.Expiration;
+                existingClient.Name = rawMaterial.Name;
+                existingClient.Description = rawMaterial.Description;
+                existingClient.SupplierId = rawMaterial.SupplierId;
+                existingClient.Amount = rawMaterial.Amount;
+                existingClient.UoM = rawMaterial.UoM;
+                existingClient.Expiration = rawMaterial.Expiration;
 
-                _dbContext.RawMaterials.Update(existingRawMaterial);
+                _dbContext.Clients.Update(existingClient);
                 await _dbContext.SaveChangesAsync();
             }
             else
@@ -66,14 +66,14 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task DeleteAsync(int id)
         {
-            var rawMaterial = await _dbContext.RawMaterials.SingleOrDefaultAsync(p => p.Id == id);
+            var rawMaterial = await _dbContext.Clients.SingleOrDefaultAsync(p => p.Id == id);
 
             if (rawMaterial == null)
             {
                 throw new InvalidOperationException("Raw material not found.");
             }
 
-            _dbContext.RawMaterials.Remove(rawMaterial);
+            _dbContext.Clients.Remove(rawMaterial);
             await _dbContext.SaveChangesAsync();
         }
 

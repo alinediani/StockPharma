@@ -5,16 +5,15 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Commands.UpdateRawMaterial
+namespace Application.Commands.UpdateClient
 {
-    public class UpdateProductsCommand : IRequest<Unit>
+    public class UpdateClientCommand : IRequest<Unit>
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public string Description { get; set; }
-        public string SupplierId { get; set; }
-        public float Amount { get; set; }
-        public int UoM { get; set; }
-        public DateTime Expiration { get; set; }
+        public string CPF { get; set; }
+        public string Address { get; set; }
+        public string Telephone { get; set; }
+        public string Email { get; set; }
     }
 }

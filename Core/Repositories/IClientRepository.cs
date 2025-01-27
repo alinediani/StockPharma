@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Core.Repositories
 {
-    public interface IRawMaterialRepository
+    public interface IClientRepository
     {
-        Task<List<RawMaterialEntity>> GetAllAsync();
-        Task AddAsync(RawMaterialEntity entity);
-        Task<RawMaterialEntity> GetByIdAsync(int id);
-        Task UpdateAsync(RawMaterialEntity rawMaterial);
+        Task<List<ClientEntity>> GetAllAsync();
+        Task AddAsync(ClientEntity entity);
+        Task<ClientEntity> GetByIdAsync(int id);
+        Task UpdateAsync(ClientEntity rawMaterial);
         Task DeleteAsync(int id);
     }
 }

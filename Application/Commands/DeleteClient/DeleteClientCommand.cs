@@ -5,11 +5,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Commands.DeleteRawMaterial
+namespace Application.Commands.DeleteClient
 {
-    public class DeleteProductsCommand : IRequest<Unit>
+    public class DeleteClientsCommand : IRequest<Unit>
     {
-        public DeleteProductsCommand(int id)
+        public DeleteClientsCommand(int id)
         {
             Id = id;
         }

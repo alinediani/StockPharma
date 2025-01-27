@@ -7,23 +7,23 @@ using Core.Entities;
 using Core.Repositories;
 using MediatR;
 
-namespace Application.Commands.CreateRawMaterial
+namespace Application.Commands.CreateOrder
 {
-    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, int>
+    public class CreateOrderCommandHandler : IRequestHandler<CreateOrderCommand, int>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public CreateClientCommandHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IOrderRepository _orderRepository;
+        public CreateOrderCommandHandler(IOrderRepository orderRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _orderRepository = orderRepository;
         }
 
-        public async Task<int> Handle(CreateClientCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            var rawMaterial = new RawMaterialEntity(request.Name, request.Description, request.SupplierId, request.Amount, request.UoM, request.Expiration);
+            var order = new OrderEntity(request.Name, request.Description, request.SupplierId, request.Amount, request.UoM, request.Expiration);
 
-            await _rawMaterialRepository.AddAsync(rawMaterial);
+            await _orderRepository.AddAsync(order);
 
-            return rawMaterial.Id;
+            return order.Id;
         }
     }
 }

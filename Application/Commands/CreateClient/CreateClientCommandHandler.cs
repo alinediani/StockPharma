@@ -7,23 +7,23 @@ using Core.Entities;
 using Core.Repositories;
 using MediatR;
 
-namespace Application.Commands.CreateRawMaterial
+namespace Application.Commands.CreateClient
 {
     public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, int>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public CreateClientCommandHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IClientRepository _clientRepository;
+        public CreateClientCommandHandler(IClientRepository clientRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _clientRepository = clientRepository;
         }
 
         public async Task<int> Handle(CreateClientCommand request, CancellationToken cancellationToken)
         {
-            var rawMaterial = new RawMaterialEntity(request.Name, request.Description, request.SupplierId, request.Amount, request.UoM, request.Expiration);
+            var client = new ClientEntity(request.Name, request.CPF,request.Address,request.Telephone,request.Email);
 
-            await _rawMaterialRepository.AddAsync(rawMaterial);
+            await _clientRepository.AddAsync(client);
 
-            return rawMaterial.Id;
+            return client.Id;
         }
     }
 }

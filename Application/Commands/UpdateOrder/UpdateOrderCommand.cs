@@ -5,9 +5,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Commands.UpdateRawMaterial
+namespace Application.Commands.UpdateOrder
 {
-    public class UpdateProductsCommand : IRequest<Unit>
+    public class UpdateOrderCommand : IRequest<Unit>
     {
         public int Id { get; set; }
         public string Name { get; set; }

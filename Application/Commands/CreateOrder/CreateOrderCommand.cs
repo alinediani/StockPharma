@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 
-namespace Application.Commands.CreateRawMaterial
+namespace Application.Commands.CreateOrder
 {
-    public class CreateClientCommand : IRequest<int>
+    public class CreateOrderCommand : IRequest<int>
     {
         public int Id { get; set; }
         public string Name { get; set; }

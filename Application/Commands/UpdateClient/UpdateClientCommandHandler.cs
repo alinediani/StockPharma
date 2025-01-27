@@ -6,33 +6,32 @@ using System.Text;
 using System.Threading.Tasks;
 using Core.Repositories;
 
-namespace Application.Commands.UpdateRawMaterial
+namespace Application.Commands.UpdateClient
 {
-    public class UpdateProductsCommandHandler : IRequestHandler<UpdateProductsCommand, Unit>
+    public class UpdateClientCommandHandler : IRequestHandler<UpdateClientCommand, Unit>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public UpdateProductsCommandHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IClientRepository _clientRepository;
+        public UpdateClientCommandHandler(IClientRepository clientRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _clientRepository = clientRepository;
         }
 
-        public async Task<Unit> Handle(UpdateProductsCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateClientCommand request, CancellationToken cancellationToken)
         {
-            var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.Id);
+            var client = await _clientRepository.GetByIdAsync(request.Id);
 
-            if (rawMaterial == null)
+            if (client == null)
             {
-                throw new InvalidOperationException("Raw material not found.");
+                throw new InvalidOperationException("Client not found.");
             }
 
-            rawMaterial.Name = request.Name;
-            rawMaterial.Description = request.Description;
-            rawMaterial.SupplierId = request.SupplierId;
-            rawMaterial.Amount = request.Amount;
-            rawMaterial.UoM = request.UoM;
-            rawMaterial.Expiration = request.Expiration;
+            client.Name = request.Name;
+            client.CPF = request.CPF;
+            client.Address = request.Address;
+            client.Telephone = request.Telephone;
+            client.Email = request.Email;
 
-            await _rawMaterialRepository.UpdateAsync(rawMaterial);
+            await _clientRepository.UpdateAsync(client);
 
             return Unit.Value;
         }
