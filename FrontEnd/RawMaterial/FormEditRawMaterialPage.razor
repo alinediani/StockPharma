@@ -1,9 +1,10 @@
-﻿@page "/RawMaterials/new"
+﻿@page "/RawMaterials/edit/{id}"
 @using System.ComponentModel.DataAnnotations
 @using FrontEnd.Models
+@using FrontEnd.Enums
 @inject HttpClient httpClient
 
-<h3>Cadastro de novo produto</h3>
+<h3>Editar Produto</h3>
 
 <EditForm Model="@novaMateria" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
@@ -19,10 +20,17 @@
                                   @bind-Value="novaMateria.Description" For="@(() => novaMateria.Description)" />
                     <MudTextField Label="Quantidade" HelperText="Adicione uma quantidade dessa matéria prima" Class="mt-3"
                                   @bind-Value="novaMateria.Amount" For="@(() => novaMateria.Amount)" InputType="InputType.Number" />
- 
+
+                    <MudSelect T="UoM" Label="Unidade de Medida" @bind-Value="novaMateria.UoM" Class="mt-3">
+                        @foreach (UoM unit in Enum.GetValues(typeof(UoM)))
+                        {
+                            <MudSelectItem T="UoM" Value="unit">@unit.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
+
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Cadastrar</MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Atualizar</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>
@@ -32,11 +40,11 @@
                 <MudText Typo="Typo.subtitle2">Resumo de Validação</MudText>
                 @if (success)
                 {
-                    <MudText Color="Color.Success">Produto cadastrado com sucesso!</MudText>
+                    <MudText Color="Color.Success">Produto atualizado com sucesso!</MudText>
                 }
                 else if (error)
                 {
-                    <MudText Color="Color.Error">Ocorreu um erro ao cadastrar o produto.</MudText>
+                    <MudText Color="Color.Error">Ocorreu um erro ao atualizar o produto.</MudText>
                 }
                 else
                 {
@@ -51,10 +59,36 @@
 </EditForm>
 
 @code {
+    [Parameter]
+    public string Id { get; set; }  // Alterado para string
+
     RawMaterial novaMateria = new RawMaterial();
 
     bool success;
     bool error;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Convertendo o Id para int antes de usar
+        if (int.TryParse(Id, out int idInt))
+        {
+            // Carregar os dados da matéria-prima a partir do servidor usando o ID
+            var response = await httpClient.GetFromJsonAsync<RawMaterial>($"https://localhost:7008/api/RawMaterials/{idInt}");
+
+            if (response != null)
+            {
+                novaMateria = response;
+            }
+            else
+            {
+                error = true;
+            }
+        }
+        else
+        {
+            error = true; // Caso a conversão falhe
+        }
+    }
 
     private async Task OnValidSubmit(EditContext context)
     {
@@ -63,22 +97,22 @@
 
         try
         {
-            var response = await httpClient.PostAsJsonAsync("https://localhost:7008/RawMaterials/new", novaMateria);
+            var response = await httpClient.PutAsJsonAsync($"https://localhost:7008/api/RawMaterials/{novaMateria.Id}", novaMateria);
 
             if (response.IsSuccessStatusCode)
             {
-                success = true; 
+                success = true;
             }
             else
             {
-                error = true; 
+                error = true;
             }
         }
         catch (Exception)
         {
-            error = true; 
+            error = true;
         }
 
-        StateHasChanged(); 
+        StateHasChanged();
     }
 }

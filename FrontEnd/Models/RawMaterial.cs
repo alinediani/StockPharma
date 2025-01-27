@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using FrontEnd.Enums;
 
 namespace FrontEnd.Models
 {
@@ -14,6 +15,9 @@ namespace FrontEnd.Models
         [Required(ErrorMessage = "O fornecedor é obrigatório.")]
         [Range(0, int.MaxValue, ErrorMessage = "O valor da quantidade deve ser maior ou igual a 0.")]
         public int Amount { get; set; } = 0;
+        public UoM UoM { get; set; }
         public DateTime? Expiration { get; set; }
+
+
     }
 }

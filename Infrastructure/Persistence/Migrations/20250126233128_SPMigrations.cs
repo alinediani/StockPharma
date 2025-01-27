@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -21,7 +22,7 @@ namespace Infrastructure.Persistence.Migrations
                     SupplierId = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Amount = table.Column<float>(type: "real", nullable: false),
                     UoM = table.Column<int>(type: "int", nullable: false),
-                    Expiration = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                    Expiration = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {

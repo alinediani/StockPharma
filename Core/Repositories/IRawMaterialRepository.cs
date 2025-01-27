@@ -12,5 +12,7 @@ namespace Core.Repositories
         Task<List<RawMaterialEntity>> GetAllAsync();
         Task AddAsync(RawMaterialEntity entity);
         Task<RawMaterialEntity> GetByIdAsync(int id);
+        Task UpdateAsync(RawMaterialEntity rawMaterial);
+        Task DeleteAsync(int id);
     }
 }

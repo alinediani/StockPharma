@@ -42,6 +42,40 @@ namespace Infrastructure.Persistence.Repositories
         {
             return await _dbContext.RawMaterials.SingleOrDefaultAsync(p => p.Id == id);
         }
+        public async Task UpdateAsync(RawMaterialEntity rawMaterial)
+        {
+            var existingRawMaterial = await _dbContext.RawMaterials
+                                                      .SingleOrDefaultAsync(p => p.Id == rawMaterial.Id);
+            if (existingRawMaterial != null)
+            {
+                existingRawMaterial.Name = rawMaterial.Name;
+                existingRawMaterial.Description = rawMaterial.Description;
+                existingRawMaterial.SupplierId = rawMaterial.SupplierId;
+                existingRawMaterial.Amount = rawMaterial.Amount;
+                existingRawMaterial.UoM = rawMaterial.UoM;
+                existingRawMaterial.Expiration = rawMaterial.Expiration;
+
+                _dbContext.RawMaterials.Update(existingRawMaterial);
+                await _dbContext.SaveChangesAsync();
+            }
+            else
+            {
+                throw new InvalidOperationException("Raw material not found.");
+            }
+        }
+
+        public async Task DeleteAsync(int id)
+        {
+            var rawMaterial = await _dbContext.RawMaterials.SingleOrDefaultAsync(p => p.Id == id);
+
+            if (rawMaterial == null)
+            {
+                throw new InvalidOperationException("Raw material not found.");
+            }
+
+            _dbContext.RawMaterials.Remove(rawMaterial);
+            await _dbContext.SaveChangesAsync();
+        }
 
     }
 }

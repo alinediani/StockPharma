@@ -3,6 +3,10 @@
 @using FrontEnd.Models
 @using System.Net.Http.Json
 @inject HttpClient httpClient
+@inject MudBlazor.ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
+<MudButton OnClick="@(() => ToNewRawMaterial())">Adiconar nova Materia Prima</MudButton>
 
 <MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<RawMaterial, bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
     <ToolBarContent>
@@ -24,8 +28,8 @@
         <MudTd DataLabel="Fornecedor">@context.SupplierId</MudTd>
         <MudTd DataLabel="Validade">@context.Expiration</MudTd>
         <MudTd DataLabel="Quantidade">@context.Amount</MudTd>
-        <MudTd DataLabel=""><MudButton>Editar</MudButton></MudTd>
-        <MudTd DataLabel=""><MudButton>Deletar</MudButton></MudTd>
+        <MudTd DataLabel=""><MudButton OnClick="@(() => OnEditById(context.Id))">Editar</MudButton></MudTd>
+        <MudTd DataLabel=""><MudButton OnClick="@(() => OnDeleteById(context.Id))">Deletar</MudButton></MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager />
@@ -65,10 +69,8 @@
         }
     }
 
-
     private bool FilterFunc1(RawMaterial element) => FilterFunc(element, searchString1);
 
-    
     private bool FilterFunc(RawMaterial element, string searchString)
     {
         if (element == null)
@@ -89,4 +91,30 @@
         return false;
     }
 
+    private async Task OnEditById(int id)
+    {
+        NavigationManager.NavigateTo($"/RawMaterials/edit/{id}");
+    }
+    private async Task ToNewRawMaterial()
+    {
+        NavigationManager.NavigateTo($"/RawMaterials/new");
+    }
+
+    private async Task OnDeleteById(int id)
+    {
+        var response = await httpClient.DeleteAsync($"https://localhost:7008/api/RawMaterials/{id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            Elements = Elements.Where(e => e.Id != id).ToList();
+
+            Snackbar.Add("Produto deletado com sucesso!", MudBlazor.Severity.Success);
+
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Erro ao deletar o produto.", MudBlazor.Severity.Error);
+        }
+    }
 }

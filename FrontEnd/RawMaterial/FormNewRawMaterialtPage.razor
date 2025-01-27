@@ -1,24 +1,33 @@
-﻿@page "/Products/new"
+﻿@page "/RawMaterials/new"
 @using System.ComponentModel.DataAnnotations
 @using FrontEnd.Models
+@using FrontEnd.Enums
 @inject HttpClient httpClient
 
 <h3>Cadastro de novo produto</h3>
 
-<EditForm Model="@newProduct" OnValidSubmit="OnValidSubmit">
+<EditForm Model="@novaMateria" OnValidSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudGrid>
         <MudItem xs="12" sm="7">
             <MudCard>
                 <MudCardContent>
+                    <MudTextField Label="Id" HelperText="Código do fornecedor"
+                                  @bind-Value="novaMateria.SupplierId" For="@(() => novaMateria.SupplierId)" />
                     <MudTextField Label="Nome" HelperText="Min. 4 caracteres"
-                                  @bind-Value="newProduct.Name" For="@(() => newProduct.Name)" />
+                                  @bind-Value="novaMateria.Name" For="@(() => novaMateria.Name)" />
                     <MudTextField Label="Descrição" Class="mt-3"
-                                  @bind-Value="newProduct.Description" For="@(() => newProduct.Description)" />
-                    <MudTextField Label="Quantidade" HelperText="Adicione a quantidade desse produto" Class="mt-3"
-                                  @bind-Value="newProduct.Amount" For="@(() => newProduct.Amount)" InputType="InputType.Number" />
-                    <MudTextField Label="Preço" HelperText="Adicione o valor do produto" Class="mt-3"
-                                  @bind-Value="newProduct.Price" For="@(() => newProduct.Price)" InputType="InputType.Number" />
+                                  @bind-Value="novaMateria.Description" For="@(() => novaMateria.Description)" />
+                    <MudTextField Label="Quantidade" HelperText="Adicione uma quantidade dessa matéria prima" Class="mt-3"
+                                  @bind-Value="novaMateria.Amount" For="@(() => novaMateria.Amount)" InputType="InputType.Number" />
+
+                    
+                    <MudSelect T="UoM" Label="Unidade de Medida" @bind-Value="novaMateria.UoM" Class="mt-3">
+                        @foreach (UoM unit in Enum.GetValues(typeof(UoM)))
+                        {
+                            <MudSelectItem T="UoM" Value="unit">@unit.ToString()</MudSelectItem>
+                        }
+                    </MudSelect>
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Cadastrar</MudButton>
@@ -27,6 +36,7 @@
         </MudItem>
         <MudItem xs="12" sm="5">
             <MudPaper Class="pa-4 mud-height-full">
+                <MudDatePicker Label="Data de validade" Editable="true" @bind-Date="novaMateria.Expiration" Placeholder="Selecione a data de validade" />
                 <MudText Typo="Typo.subtitle2">Resumo de Validação</MudText>
                 @if (success)
                 {
@@ -49,7 +59,7 @@
 </EditForm>
 
 @code {
-    Product newProduct = new Product();
+    RawMaterial novaMateria = new RawMaterial();
 
     bool success;
     bool error;
@@ -61,11 +71,13 @@
 
         try
         {
-            var response = await httpClient.PostAsJsonAsync("https://localhost:7008/RawMaterials/new", newProduct);
+            var response = await httpClient.PostAsJsonAsync("https://localhost:7008/RawMaterials/new", novaMateria);
 
             if (response.IsSuccessStatusCode)
             {
                 success = true;
+                
+                novaMateria = new RawMaterial();
             }
             else
             {
@@ -80,5 +92,4 @@
         StateHasChanged();
     }
 
-   
 }

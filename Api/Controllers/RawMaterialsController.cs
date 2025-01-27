@@ -3,6 +3,8 @@ using MediatR;
 using Application.Queries.GetAllRawMaterials;
 using Application.Queries.GetRawMaterialById;
 using Application.Commands.CreateRawMaterial;
+using Application.Commands.UpdateRawMaterial;
+using Application.Commands.DeleteRawMaterial;
 
 namespace Api.Controllers
 {
