@@ -1,35 +1,35 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Application.Commands.CreateClient;
+using Application.Commands.DeleteClient;
+using Application.Commands.UpdateClient;
+using Application.Queries.GetAllClients;
+using Application.Queries.GetClientById;
 using MediatR;
-using Application.Queries.GetAllRawMaterials;
-using Application.Queries.GetRawMaterialById;
-using Application.Commands.CreateRawMaterial;
-using Application.Commands.UpdateRawMaterial;
-using Application.Commands.DeleteRawMaterial;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Api.Controllers
 {
     [ApiController]
-    [Route("api/RawMaterials")]
-    public class RawMaterialsController : ControllerBase
+    [Route("api/Clients")]
+    public class ClientsController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public RawMaterialsController(IMediator mediator)
+        public ClientsController(IMediator mediator)
         {
             _mediator = mediator;
         }
-        
+
         [HttpGet]
         public async Task<IActionResult> Get(string query)
         {
-            var getAllRawMaterialsQuery = new GetAllRawMaterialsQuery(query);
+            var getAllClientsQuery = new GetAllClientsQuery(query);
 
-            var rawMaterials = await _mediator.Send(getAllRawMaterialsQuery);
+            var rawMaterials = await _mediator.Send(getAllClientsQuery);
 
             return Ok(rawMaterials);
         }
 
-        [HttpPost("/RawMaterials/new")]
+        [HttpPost("/Clients/new")]
         public async Task<IActionResult> Post([FromBody] CreateClientCommand command)
         {
             var id = await _mediator.Send(command);
@@ -40,7 +40,7 @@ namespace Api.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var query = new GetRawMaterialByIdQuery(id);
+            var query = new GetClientByIdQuery(id);
 
             var rawMaterial = await _mediator.Send(query);
 
@@ -53,7 +53,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] UpdateProductsCommand command)
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateClientCommand command)
         {
             if (command.Description.Length > 200)
             {
@@ -68,7 +68,7 @@ namespace Api.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {
-            var command = new DeleteRawMaterialCommand(id);
+            var command = new DeleteClientCommand(id);
 
             await _mediator.Send(command);
 

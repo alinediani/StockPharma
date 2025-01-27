@@ -1,15 +1,16 @@
-﻿using MediatR;
+﻿using Application.ViewModels;
+using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Commands.DeleteRawMaterial
+namespace Application.Queries.GetRawMaterialById
 {
-    public class DeleteProductsCommand : IRequest<Unit>
+    public class GetRawMaterialByIdQuery : IRequest<RawMaterialsViewModel>
     {
-        public DeleteProductsCommand(int id)
+        public GetRawMaterialByIdQuery(int id)
         {
             Id = id;
         }
