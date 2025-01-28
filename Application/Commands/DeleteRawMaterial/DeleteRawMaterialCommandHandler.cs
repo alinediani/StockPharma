@@ -8,15 +8,15 @@ using Core.Repositories;
 
 namespace Application.Commands.DeleteRawMaterial
 {
-    public class DeleteRawMaterialsCommandHandler : IRequestHandler<DeleteRawMaterialsCommand, Unit>
+    public class DeleteRawMaterialCommandHandler : IRequestHandler<DeleteRawMaterialCommand, Unit>
     {
         private readonly IRawMaterialRepository _rawMaterialRepository;
-        public DeleteRawMaterialsCommandHandler(IRawMaterialRepository rawMaterialRepository)
+        public DeleteRawMaterialCommandHandler(IRawMaterialRepository rawMaterialRepository)
         {
             _rawMaterialRepository = rawMaterialRepository;
         }
 
-        public async Task<Unit> Handle(DeleteRawMaterialsCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteRawMaterialCommand request, CancellationToken cancellationToken)
         {
             var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.Id);
 

@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.Commands.DeleteRawMaterial
 {
-    public class DeleteRawMaterialsCommand : IRequest<Unit>
+    public class DeleteRawMaterialCommand : IRequest<Unit>
     {
-        public DeleteRawMaterialsCommand(int id)
+        public DeleteRawMaterialCommand(int id)
         {
             Id = id;
         }

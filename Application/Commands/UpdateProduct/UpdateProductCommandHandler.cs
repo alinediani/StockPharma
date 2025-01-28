@@ -8,15 +8,15 @@ using Core.Repositories;
 
 namespace Application.Commands.UpdateProduct
 {
-    public class UpdateProductsCommandHandler : IRequestHandler<UpdateProductsCommand, Unit>
+    public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Unit>
     {
         private readonly IProductRepository _productRepository;
-        public UpdateProductsCommandHandler(IProductRepository productRepository)
+        public UpdateProductCommandHandler(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
 
-        public async Task<Unit> Handle(UpdateProductsCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.GetByIdAsync(request.Id);
 

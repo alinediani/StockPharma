@@ -8,9 +8,9 @@ using MediatR;
 
 namespace Application.Queries.GetAllRawMaterials
 {
-    public class GetAllClientsQuery : IRequest<List<RawMaterialsViewModel>>
+    public class GetAllRawMaterialsQuery : IRequest<List<RawMaterialsViewModel>>
     {
-        public GetAllClientsQuery(string query)
+        public GetAllRawMaterialsQuery(string query)
         {
             Query = query;
         }

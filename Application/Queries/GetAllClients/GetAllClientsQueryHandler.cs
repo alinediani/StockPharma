@@ -7,25 +7,25 @@ using MediatR;
 using Application.ViewModels;
 using Core.Repositories;
 
-namespace Application.Queries.GetAllRawMaterials
+namespace Application.Queries.GetAllClients
 {
-    public class GetAllClientsQueryHandler : IRequestHandler<GetAllClientsQuery, List<RawMaterialsViewModel>>
+    public class GetAllClientsQueryHandler : IRequestHandler<GetAllClientsQuery, List<ClientsViewModel>>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public GetAllClientsQueryHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IClientRepository _clientRepository;
+        public GetAllClientsQueryHandler(IClientRepository clientRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _clientRepository = clientRepository;
         }
 
-        public async Task<List<RawMaterialsViewModel>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
+        public async Task<List<ClientsViewModel>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
         {
-            var rawMaterials = await _rawMaterialRepository.GetAllAsync();
+            var clients = await _clientRepository.GetAllAsync();
 
-            var rawMaterialsViewModel = rawMaterials
-                .Select(r => new RawMaterialsViewModel(r.Id,r.Name,r.Description,r.SupplierId,r.Amount,r.UoM,r.Expiration))
+            var clientsViewModel = clients
+                .Select(r => new ClientsViewModel(r.Id,r.Name,r.Description,r.SupplierId,r.Amount,r.UoM,r.Expiration))
                 .ToList();
 
-            return rawMaterialsViewModel;
+            return clientsViewModel;
         }
     }
 }

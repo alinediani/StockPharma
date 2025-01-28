@@ -7,23 +7,23 @@ using System.Threading.Tasks;
 using Core.Repositories;
 using Application.ViewModels;
 
-namespace Application.Queries.GetRawMaterialById
+namespace Application.Queries.GetProductById
 {
-    public class GetClientByIdQueryHandler : IRequestHandler<GetClientByIdQuery, RawMaterialsViewModel>
+    public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ProductsViewModel>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public GetClientByIdQueryHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IProductRepository _rawMaterialRepository;
+        public GetProductByIdQueryHandler(IProductRepository rawMaterialRepository)
         {
             _rawMaterialRepository = rawMaterialRepository;
         }
 
-        public async Task<RawMaterialsViewModel> Handle(GetClientByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ProductsViewModel> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
             var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.Id);
 
             if (rawMaterial == null) return null;
 
-            var rawMaterialsViewModel = new RawMaterialsViewModel(
+            var rawMaterialsViewModel = new ProductsViewModel(
                 rawMaterial.Id,
                 rawMaterial.Name,
                 rawMaterial.Description,

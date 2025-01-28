@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Application.Queries.GetRawMaterialById
 {
-    public class GetClientByIdQuery : IRequest<RawMaterialsViewModel>
+    public class GetRawMaterialByIdQuery : IRequest<RawMaterialsViewModel>
     {
-        public GetClientByIdQuery(int id)
+        public GetRawMaterialByIdQuery(int id)
         {
             Id = id;
         }

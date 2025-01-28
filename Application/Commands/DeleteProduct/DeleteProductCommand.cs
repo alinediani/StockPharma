@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.Commands.DeleteProduct
 {
-    public class DeleteProductsCommand : IRequest<Unit>
+    public class DeleteProductCommand : IRequest<Unit>
     {
-        public DeleteProductsCommand(int id)
+        public DeleteProductCommand(int id)
         {
             Id = id;
         }

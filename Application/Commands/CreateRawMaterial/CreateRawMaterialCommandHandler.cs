@@ -9,15 +9,15 @@ using MediatR;
 
 namespace Application.Commands.CreateRawMaterial
 {
-    public class CreateClientCommandHandler : IRequestHandler<CreateClientCommand, int>
+    public class CreateRawMaterialCommandHandler : IRequestHandler<CreateRawMaterialCommand, int>
     {
         private readonly IRawMaterialRepository _rawMaterialRepository;
-        public CreateClientCommandHandler(IRawMaterialRepository rawMaterialRepository)
+        public CreateRawMaterialCommandHandler(IRawMaterialRepository rawMaterialRepository)
         {
             _rawMaterialRepository = rawMaterialRepository;
         }
 
-        public async Task<int> Handle(CreateClientCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateRawMaterialCommand request, CancellationToken cancellationToken)
         {
             var rawMaterial = new RawMaterialEntity(request.Name, request.Description, request.SupplierId, request.Amount, request.UoM, request.Expiration);
 

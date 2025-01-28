@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 using Application.ViewModels;
 using MediatR;
 
-namespace Application.Queries.GetAllRawMaterials
+namespace Application.Queries.GetAllClients
 {
-    public class GetAllClientsQuery : IRequest<List<RawMaterialsViewModel>>
+    public class GetAllClientsQuery : IRequest<List<ClientsViewModel>>
     {
         public GetAllClientsQuery(string query)
         {

@@ -6,9 +6,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Queries.GetRawMaterialById
+namespace Application.Queries.GetClientById
 {
-    public class GetClientByIdQuery : IRequest<RawMaterialsViewModel>
+    public class GetClientByIdQuery : IRequest<ClientsViewModel>
     {
         public GetClientByIdQuery(int id)
         {

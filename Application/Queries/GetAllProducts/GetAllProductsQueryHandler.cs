@@ -7,22 +7,22 @@ using MediatR;
 using Application.ViewModels;
 using Core.Repositories;
 
-namespace Application.Queries.GetAllRawMaterials
+namespace Application.Queries.GetAllProducts
 {
-    public class GetAllClientsQueryHandler : IRequestHandler<GetAllClientsQuery, List<RawMaterialsViewModel>>
+    public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, List<ProductsViewModel>>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public GetAllClientsQueryHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IProductRepository _rawMaterialRepository;
+        public GetAllProductsQueryHandler(IProductRepository rawMaterialRepository)
         {
             _rawMaterialRepository = rawMaterialRepository;
         }
 
-        public async Task<List<RawMaterialsViewModel>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
+        public async Task<List<ProductsViewModel>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
             var rawMaterials = await _rawMaterialRepository.GetAllAsync();
 
             var rawMaterialsViewModel = rawMaterials
-                .Select(r => new RawMaterialsViewModel(r.Id,r.Name,r.Description,r.SupplierId,r.Amount,r.UoM,r.Expiration))
+                .Select(r => new ProductsViewModel(r.Id,r.Name,r.Description,r.SupplierId,r.Amount,r.UoM,r.Expiration))
                 .ToList();
 
             return rawMaterialsViewModel;

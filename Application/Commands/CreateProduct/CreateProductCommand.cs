@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using MediatR;
 
-namespace Application.Commands.CreateRawMaterial
+namespace Application.Commands.CreateProduct
 {
-    public class CreateRawMaterialCommand : IRequest<int>
+    public class CreateProductCommand : IRequest<int>
     {
         public int Id { get; set; }
         public string Name { get; set; }

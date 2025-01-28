@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 using Application.ViewModels;
 using MediatR;
 
-namespace Application.Queries.GetAllRawMaterials
+namespace Application.Queries.GetAllOrders
 {
-    public class GetAllClientsQuery : IRequest<List<RawMaterialsViewModel>>
+    public class GetAllOrdersQuery : IRequest<List<OrdersViewModel>>
     {
-        public GetAllClientsQuery(string query)
+        public GetAllOrdersQuery(string query)
         {
             Query = query;
         }

@@ -3,12 +3,21 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using MediatR;
 
-namespace Application.Commands.CreateRawMaterial
+namespace Application.ViewModels
 {
-    public class CreateRawMaterialCommand : IRequest<int>
+    public class ProductsViewModel
     {
+        public ProductsViewModel(int id,string name, string description, string supplierId, float amount, int uoM, DateTime expiration)
+        {
+            Id = id;
+            Name = name;
+            Description = description;
+            SupplierId = supplierId;
+            Amount = amount;
+            UoM = uoM;
+            Expiration = expiration;
+        }
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

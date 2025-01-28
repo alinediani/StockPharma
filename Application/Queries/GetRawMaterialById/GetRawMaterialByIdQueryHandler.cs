@@ -9,15 +9,15 @@ using Application.ViewModels;
 
 namespace Application.Queries.GetRawMaterialById
 {
-    public class GetClientByIdQueryHandler : IRequestHandler<GetClientByIdQuery, RawMaterialsViewModel>
+    public class GetRawMaterialByIdQueryHandler : IRequestHandler<GetRawMaterialByIdQuery, RawMaterialsViewModel>
     {
         private readonly IRawMaterialRepository _rawMaterialRepository;
-        public GetClientByIdQueryHandler(IRawMaterialRepository rawMaterialRepository)
+        public GetRawMaterialByIdQueryHandler(IRawMaterialRepository rawMaterialRepository)
         {
             _rawMaterialRepository = rawMaterialRepository;
         }
 
-        public async Task<RawMaterialsViewModel> Handle(GetClientByIdQuery request, CancellationToken cancellationToken)
+        public async Task<RawMaterialsViewModel> Handle(GetRawMaterialByIdQuery request, CancellationToken cancellationToken)
         {
             var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.Id);
 

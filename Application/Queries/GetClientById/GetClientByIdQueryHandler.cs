@@ -7,33 +7,33 @@ using System.Threading.Tasks;
 using Core.Repositories;
 using Application.ViewModels;
 
-namespace Application.Queries.GetRawMaterialById
+namespace Application.Queries.GetClientById
 {
-    public class GetClientByIdQueryHandler : IRequestHandler<GetClientByIdQuery, RawMaterialsViewModel>
+    public class GetClientByIdQueryHandler : IRequestHandler<GetClientByIdQuery, ClientsViewModel>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public GetClientByIdQueryHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IClientRepository _clientRepository;
+        public GetClientByIdQueryHandler(IClientRepository clientRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _clientRepository = clientRepository;
         }
 
-        public async Task<RawMaterialsViewModel> Handle(GetClientByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ClientsViewModel> Handle(GetClientByIdQuery request, CancellationToken cancellationToken)
         {
-            var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.Id);
+            var client = await _clientRepository.GetByIdAsync(request.Id);
 
-            if (rawMaterial == null) return null;
+            if (client == null) return null;
 
-            var rawMaterialsViewModel = new RawMaterialsViewModel(
-                rawMaterial.Id,
-                rawMaterial.Name,
-                rawMaterial.Description,
-                rawMaterial.SupplierId,
-                rawMaterial.Amount,
-                rawMaterial.UoM,
-                rawMaterial.Expiration
+            var clientsViewModel = new ClientsViewModel(
+                client.Id,
+                client.Name,
+                client.Description,
+                client.SupplierId,
+                client.Amount,
+                client.UoM,
+                client.Expiration
                 );
 
-            return rawMaterialsViewModel;
+            return clientsViewModel;
         }
     }
 }

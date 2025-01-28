@@ -7,25 +7,25 @@ using MediatR;
 using Application.ViewModels;
 using Core.Repositories;
 
-namespace Application.Queries.GetAllRawMaterials
+namespace Application.Queries.GetAllOrders
 {
-    public class GetAllClientsQueryHandler : IRequestHandler<GetAllClientsQuery, List<RawMaterialsViewModel>>
+    public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, List<OrdersViewModel>>
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public GetAllClientsQueryHandler(IRawMaterialRepository rawMaterialRepository)
+        private readonly IOrderRepository _orderRepository;
+        public GetAllOrdersQueryHandler(IOrderRepository orderRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _orderRepository = orderRepository;
         }
 
-        public async Task<List<RawMaterialsViewModel>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
+        public async Task<List<OrdersViewModel>> Handle(GetAllOrdersQuery request, CancellationToken cancellationToken)
         {
-            var rawMaterials = await _rawMaterialRepository.GetAllAsync();
+            var orders = await _orderRepository.GetAllAsync();
 
-            var rawMaterialsViewModel = rawMaterials
-                .Select(r => new RawMaterialsViewModel(r.Id,r.Name,r.Description,r.SupplierId,r.Amount,r.UoM,r.Expiration))
+            var ordersViewModel = orders
+                .Select(r => new OrdersViewModel(r.Id,r.Name,r.Description,r.SupplierId,r.Amount,r.UoM,r.Expiration))
                 .ToList();
 
-            return rawMaterialsViewModel;
+            return ordersViewModel;
         }
     }
 }

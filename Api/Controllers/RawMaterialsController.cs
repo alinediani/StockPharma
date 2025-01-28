@@ -30,7 +30,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("/RawMaterials/new")]
-        public async Task<IActionResult> Post([FromBody] CreateClientCommand command)
+        public async Task<IActionResult> Post([FromBody] CreateRawMaterialCommand command)
         {
             var id = await _mediator.Send(command);
 
@@ -53,7 +53,7 @@ namespace Api.Controllers
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put(int id, [FromBody] UpdateProductsCommand command)
+        public async Task<IActionResult> Put(int id, [FromBody] UpdateRawMaterialCommand command)
         {
             if (command.Description.Length > 200)
             {

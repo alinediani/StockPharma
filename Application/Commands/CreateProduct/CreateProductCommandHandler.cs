@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Application.Commands.CreateProducts;
+using Application.Commands.CreateProduct;
 using Core.Entities;
 using Core.Repositories;
 using MediatR;
 
 namespace Application.Commands.CreateProduct
 {
-    public class CreateProductCommandHandler : IRequestHandler<CreateProductsCommand, int>
+    public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
     {
         private readonly IProductRepository _productRepository;
         public CreateProductCommandHandler(IProductRepository productRepository)
@@ -18,7 +18,7 @@ namespace Application.Commands.CreateProduct
             _productRepository = productRepository;
         }
 
-        public async Task<int> Handle(CreateProductsCommand request, CancellationToken cancellationToken)
+        public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
             var product = new ProductEntity(request.Name, request.Description, request.SupplierId, request.Amount, request.UoM, request.Expiration);
 

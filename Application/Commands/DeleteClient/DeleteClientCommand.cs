@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Application.Commands.DeleteClient
 {
-    public class DeleteClientsCommand : IRequest<Unit>
+    public class DeleteClientCommand : IRequest<Unit>
     {
-        public DeleteClientsCommand(int id)
+        public DeleteClientCommand(int id)
         {
             Id = id;
         }

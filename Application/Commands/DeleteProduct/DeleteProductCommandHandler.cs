@@ -8,15 +8,15 @@ using Core.Repositories;
 
 namespace Application.Commands.DeleteProduct
 {
-    public class DeleteProductsCommandHandler : IRequestHandler<DeleteProductsCommand, Unit>
+    public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand, Unit>
     {
         private readonly IProductRepository _productRepository;
-        public DeleteProductsCommandHandler(IProductRepository productRepository)
+        public DeleteProductCommandHandler(IProductRepository productRepository)
         {
             _productRepository = productRepository;
         }
 
-        public async Task<Unit> Handle(DeleteProductsCommand request, CancellationToken cancellationToken)
+        public async Task<Unit> Handle(DeleteProductCommand request, CancellationToken cancellationToken)
         {
             var product = await _productRepository.GetByIdAsync(request.Id);
 

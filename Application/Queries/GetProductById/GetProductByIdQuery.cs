@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Application.Queries.GetRawMaterialById
+namespace Application.Queries.GetProductById
 {
-    public class GetClientByIdQuery : IRequest<RawMaterialsViewModel>
+    public class GetProductByIdQuery : IRequest<ProductsViewModel>
     {
-        public GetClientByIdQuery(int id)
+        public GetProductByIdQuery(int id)
         {
             Id = id;
         }
