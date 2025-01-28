@@ -1,23 +1,22 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Core.Entities
 {
     public class ClientEntity : BaseEntity
     {
-        public ClientEntity(
-            string name,
-            string cPF,
-            string address,
-            string telephone,
-            string email,
-            ICollection<OrderEntity> orders = null)
+        // Construtor sem parâmetros para o EF Core
+        public ClientEntity() { }
+
+        // Construtor com parâmetros
+        public ClientEntity(string name, string cPF, string address, string telephone, string email, ICollection<OrderEntity> orders)
         {
             Name = name;
             CPF = cPF;
             Address = address;
             Telephone = telephone;
             Email = email;
-            Orders = orders ?? new List<OrderEntity>();
+            Orders = orders ?? new List<OrderEntity>();  // Inicializa a lista para evitar problemas
         }
 
         public string Name { get; set; }
@@ -25,6 +24,8 @@ namespace Core.Entities
         public string Address { get; set; }
         public string Telephone { get; set; }
         public string Email { get; set; }
-        public ICollection<OrderEntity> Orders { get; set; }
+
+        // Propriedade de navegação
+        public ICollection<OrderEntity> Orders { get; set; } = new List<OrderEntity>();
     }
 }

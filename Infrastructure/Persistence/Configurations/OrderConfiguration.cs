@@ -12,7 +12,7 @@ namespace Infrastructure.Persistence.Configurations
 
             builder.HasOne(o => o.Client)
                    .WithMany(c => c.Orders)
-                   .HasForeignKey(o => o.Client.Id);
+                   .HasForeignKey(o => o.ClientId);
 
             builder.HasMany(o => o.OrderProducts)
                    .WithOne(op => op.Order)

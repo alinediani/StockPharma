@@ -4,6 +4,10 @@ namespace Core.Entities
 {
     public class ProductEntity : BaseEntity
     {
+        public ProductEntity()
+        {
+            ProductRawMaterials = new List<ProductRawMaterialEntity>(); // Inicializa a coleção de materiais
+        }
         public ProductEntity(
             string name,
             string description,

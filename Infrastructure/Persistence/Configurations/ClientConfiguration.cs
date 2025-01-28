@@ -22,10 +22,9 @@ namespace Infrastructure.Persistence.Configurations
             builder.Property(x => x.Email)
                    .HasMaxLength(200);
 
-            builder
-                .HasMany<OrderEntity>()
-                .WithOne(x => x.Client)
-                .HasForeignKey("ClientId")
+            builder.HasMany(x => x.Orders)  // Referência ao relacionamento de Orders na entidade Client
+                .WithOne(x => x.Client)  // Relacionamento inverso
+                .HasForeignKey(x => x.ClientId)  // A chave estrangeira deve ser especificada
                 .OnDelete(DeleteBehavior.Cascade);
         }
     }

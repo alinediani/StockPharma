@@ -43,6 +43,7 @@ namespace Application.Commands.CreateOrder
             }
 
             var order = new OrderEntity(
+                client.Id,
                 client,
                 orderProducts,
                 request.Amount,
