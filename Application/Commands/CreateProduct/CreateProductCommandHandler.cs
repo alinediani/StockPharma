@@ -1,28 +1,50 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using MediatR;
 using System.Threading.Tasks;
-using Application.Commands.CreateProduct;
-using Core.Entities;
 using Core.Repositories;
-using MediatR;
+using Core.Entities;
+using System.Collections.Generic;
 
 namespace Application.Commands.CreateProduct
 {
     public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, int>
     {
         private readonly IProductRepository _productRepository;
-        public CreateProductCommandHandler(IProductRepository productRepository)
+        private readonly IProductRawMaterialRepository _productRawMaterialRepository;
+
+        public CreateProductCommandHandler(IProductRepository productRepository, IProductRawMaterialRepository productRawMaterialRepository)
         {
             _productRepository = productRepository;
+            _productRawMaterialRepository = productRawMaterialRepository;
         }
 
         public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var product = new ProductEntity(request.Name, request.Description, request.RawMaterial, request.Price, request.Amount);
+            var productRawMaterials = new List<ProductRawMaterialEntity>();
+
+            foreach (var rawMaterialDto in request.RawMaterials)
+            {
+                var productRawMaterial = new ProductRawMaterialEntity
+                {
+                    RawMaterialId = rawMaterialDto.RawMaterialId
+                };
+                productRawMaterials.Add(productRawMaterial);
+            }
+
+            var product = new ProductEntity(
+                request.Name,
+                request.Description,
+                productRawMaterials,
+                request.Price,
+                request.Amount
+            );
 
             await _productRepository.AddAsync(product);
+
+            foreach (var productRawMaterial in productRawMaterials)
+            {
+                productRawMaterial.ProductId = product.Id;
+                await _productRawMaterialRepository.AddProductRawMaterialAsync(productRawMaterial);
+            }
 
             return product.Id;
         }

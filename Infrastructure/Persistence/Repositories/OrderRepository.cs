@@ -13,11 +13,13 @@ namespace Infrastructure.Persistence.Repositories
     public class OrderRepository : IOrderRepository
     {
         private readonly StockPharmaDbContext _dbContext;
+        private readonly IOrderProductRepository _orderProductRepository;
         private readonly string _connectionString;
-        public OrderRepository(StockPharmaDbContext dbContext, IConfiguration configuration)
+        public OrderRepository(StockPharmaDbContext dbContext, IConfiguration configuration, IOrderProductRepository orderProductRepository)
         {
             _dbContext = dbContext;
             _connectionString = configuration.GetConnectionString("StockPharmaCs");
+            _orderProductRepository = orderProductRepository;
         }
 
         public async Task<List<OrderEntity>> GetAllAsync()
@@ -29,8 +31,18 @@ namespace Infrastructure.Persistence.Repositories
         public async Task AddAsync(OrderEntity order)
         {
             await _dbContext.Orders.AddAsync(order);
+            await _dbContext.SaveChangesAsync(); 
+
+
+            foreach (var orderProduct in order.OrderProducts) 
+            {
+                await _orderProductRepository.AddOrderProductAsync(orderProduct);
+            }
+
             await _dbContext.SaveChangesAsync();
         }
+
+
 
 
         public async Task SaveChangesAsync()
@@ -49,7 +61,7 @@ namespace Infrastructure.Persistence.Repositories
             if (existingOrder != null)
             {
                 existingOrder.Client = order.Client;
-                existingOrder.Products = order.Products;
+                existingOrder.OrderProducts = order.OrderProducts;
                 existingOrder.Amount = order.Amount;
                 existingOrder.OrderDate = order.OrderDate;
                 existingOrder.TotalCoast = order.TotalCoast;

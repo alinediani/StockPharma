@@ -1,18 +1,16 @@
-﻿using Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.Entities;
 
 namespace Core.Repositories
 {
     public interface IOrderRepository
     {
         Task<List<OrderEntity>> GetAllAsync();
-        Task AddAsync(OrderEntity entity);
+        Task AddAsync(OrderEntity order);
+        Task SaveChangesAsync();
         Task<OrderEntity> GetByIdAsync(int id);
-        Task UpdateAsync(OrderEntity rawMaterial);
+        Task UpdateAsync(OrderEntity order);
         Task DeleteAsync(int id);
     }
 }

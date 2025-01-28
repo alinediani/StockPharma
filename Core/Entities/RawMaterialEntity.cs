@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Core.Entities
 {
@@ -24,5 +21,6 @@ namespace Core.Entities
         public float Amount { get; set; }
         public int UoM { get; set; }
         public DateTime Expiration { get; set; }
+        public ICollection<ProductRawMaterialEntity> ProductRawMaterials { get; set; } = new List<ProductRawMaterialEntity>();
     }
 }

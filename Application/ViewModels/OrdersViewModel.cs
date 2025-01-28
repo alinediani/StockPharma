@@ -1,15 +1,14 @@
-﻿using Core.Entities;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Application.ViewModels
 {
     public class OrdersViewModel
     {
-        public OrdersViewModel(int id, ClientEntity client, List<ProductEntity> products, int amount, DateTime orderDate, double totalCoast)
+        private ClientsViewModel clientsViewModel;
+        private List<ProductsViewModel> productsViewModels;
+
+        public OrdersViewModel(int id, ClientsViewModel client, List<OrderProductViewModel> products, int amount, DateTime orderDate, double totalCoast)
         {
             Id = id;
             Client = client;
@@ -20,10 +19,24 @@ namespace Application.ViewModels
         }
 
         public int Id { get; set; }
-        public ClientEntity Client { get; set; }
-        public List<ProductEntity> Products { get; set; }
+        public ClientsViewModel Client { get; set; }
+        public List<OrderProductViewModel> Products { get; set; }
         public int Amount { get; set; }
         public DateTime OrderDate { get; set; }
         public double TotalCoast { get; set; }
+    }
+
+    public class OrderProductViewModel
+    {
+        public OrderProductViewModel(int productId, string productName, int quantity)
+        {
+            ProductId = productId;
+            ProductName = productName;
+            Quantity = quantity;
+        }
+
+        public int ProductId { get; set; }
+        public string ProductName { get; set; }
+        public int Quantity { get; set; } // Quantidade do produto no pedido
     }
 }

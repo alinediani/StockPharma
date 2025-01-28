@@ -1,17 +1,16 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Core.Repositories;
+using MediatR;
 using Application.ViewModels;
+using Core.Repositories;
 
 namespace Application.Queries.GetOrderById
 {
     public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, OrdersViewModel>
     {
         private readonly IOrderRepository _orderRepository;
+
         public GetOrderByIdQueryHandler(IOrderRepository orderRepository)
         {
             _orderRepository = orderRepository;
@@ -25,12 +24,12 @@ namespace Application.Queries.GetOrderById
 
             var ordersViewModel = new OrdersViewModel(
                 order.Id,
-                order.Client,
-                order.Products,
+                new ClientsViewModel(order.Client.Id, order.Client.Name, order.Client.CPF, order.Client.Address, order.Client.Telephone, order.Client.Email),
+                order.OrderProducts.Select(op => new ProductsViewModel(op.Product.Id, op.Product.Name, op.Product.Description, op.Product.Price, op.Product.Amount)).ToList(),
                 order.Amount,
                 order.OrderDate,
                 order.TotalCoast
-                );
+            );
 
             return ordersViewModel;
         }

@@ -17,6 +17,8 @@ namespace Infrastructure.Persistence
         }
         public DbSet<RawMaterialEntity> RawMaterials { get; set; }
         public DbSet<OrderEntity> Orders { get; set; }
+        public DbSet<OrderProductEntity> OrderProducts { get; set; }
+        public DbSet<ProductRawMaterialEntity> ProductRawMaterials { get; set; }
         public DbSet<ProductEntity> Products { get; set; }
         public DbSet<ClientEntity> Clients { get; set; }
 

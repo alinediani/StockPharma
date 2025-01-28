@@ -1,5 +1,5 @@
 using Application.Queries;
-using Application.Queries.GetAllRawMaterials;
+using Application.Commands.CreateClient;
 using Core.Repositories;
 using Infrastructure.Persistence;
 using Infrastructure.Persistence.Repositories;
@@ -25,11 +25,14 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(GetAllClientsQuery).Assembly); });
+builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(CreateClientCommand).Assembly); });
 
 var connectionString = builder.Services.BuildServiceProvider().GetRequiredService<IConfiguration>().GetConnectionString("StockPharmaConnection");
 builder.Services.AddDbContext<StockPharmaDbContext>(options => options.UseSqlServer(connectionString));
 builder.Services.AddScoped<IRawMaterialRepository, RawMaterialRepository>();
+builder.Services.AddScoped<IClientRepository, ClientRepository>();
+builder.Services.AddScoped<IOrderRepository, OrderRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 
 var app = builder.Build();
 

@@ -1,18 +1,16 @@
-﻿using Core.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using Core.Entities;
 
 namespace Core.Repositories
 {
     public interface IProductRepository
     {
         Task<List<ProductEntity>> GetAllAsync();
-        Task AddAsync(ProductEntity entity);
+        Task AddAsync(ProductEntity product);
+        Task SaveChangesAsync();
         Task<ProductEntity> GetByIdAsync(int id);
-        Task UpdateAsync(ProductEntity rawMaterial);
+        Task UpdateAsync(ProductEntity product);
         Task DeleteAsync(int id);
     }
 }

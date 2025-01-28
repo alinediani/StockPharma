@@ -13,8 +13,20 @@ namespace Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<ClientEntity> builder)
         {
+            builder.HasKey(x => x.Id);
+
+            builder.Property(x => x.Name)
+                   .IsRequired()
+                   .HasMaxLength(100);
+
+            builder.Property(x => x.Email)
+                   .HasMaxLength(200);
+
             builder
-            .HasKey(x => x.Id);
+                .HasMany<OrderEntity>()
+                .WithOne(x => x.Client)
+                .HasForeignKey("ClientId")
+                .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

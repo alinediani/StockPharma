@@ -1,17 +1,16 @@
-﻿using MediatR;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
-using Core.Repositories;
+using MediatR;
 using Application.ViewModels;
+using Core.Repositories;
 
 namespace Application.Queries.GetProductById
 {
     public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ProductsViewModel>
     {
         private readonly IProductRepository _productRepository;
+
         public GetProductByIdQueryHandler(IProductRepository productRepository)
         {
             _productRepository = productRepository;
@@ -27,10 +26,10 @@ namespace Application.Queries.GetProductById
                 product.Id,
                 product.Name,
                 product.Description,
-                product.RawMaterial,
+                product.ProductRawMaterials.Select(rm => new RawMaterialsViewModel(rm.RawMaterial.Id, rm.RawMaterial.Name)).ToList(),
                 product.Price,
                 product.Amount
-                );
+            );
 
             return productsViewModel;
         }
