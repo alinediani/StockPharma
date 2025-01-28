@@ -9,15 +9,15 @@ using Core.Repositories;
 
 namespace Application.Queries.GetAllRawMaterials
 {
-    public class GetAllRawMaterialsQueryHandler : IRequestHandler<GetAllRawMaterialsQuery, List<RawMaterialsViewModel>>
+    public class GetAllClientsQueryHandler : IRequestHandler<GetAllClientsQuery, List<RawMaterialsViewModel>>
     {
         private readonly IRawMaterialRepository _rawMaterialRepository;
-        public GetAllRawMaterialsQueryHandler(IRawMaterialRepository rawMaterialRepository)
+        public GetAllClientsQueryHandler(IRawMaterialRepository rawMaterialRepository)
         {
             _rawMaterialRepository = rawMaterialRepository;
         }
 
-        public async Task<List<RawMaterialsViewModel>> Handle(GetAllRawMaterialsQuery request, CancellationToken cancellationToken)
+        public async Task<List<RawMaterialsViewModel>> Handle(GetAllClientsQuery request, CancellationToken cancellationToken)
         {
             var rawMaterials = await _rawMaterialRepository.GetAllAsync();
 

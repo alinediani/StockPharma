@@ -25,7 +25,7 @@ builder.Services.AddCors(options =>
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(GetAllRawMaterialsQuery).Assembly); });
+builder.Services.AddMediatR(cfg => { cfg.RegisterServicesFromAssemblies(typeof(GetAllClientsQuery).Assembly); });
 
 var connectionString = builder.Services.BuildServiceProvider().GetRequiredService<IConfiguration>().GetConnectionString("StockPharmaConnection");
 builder.Services.AddDbContext<StockPharmaDbContext>(options => options.UseSqlServer(connectionString));
