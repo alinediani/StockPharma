@@ -26,9 +26,9 @@ namespace Infrastructure.Persistence.Repositories
         }
 
 
-        public async Task AddAsync(ClientEntity rawMaterial)
+        public async Task AddAsync(ClientEntity client)
         {
-            await _dbContext.Clients.AddAsync(rawMaterial);
+            await _dbContext.Clients.AddAsync(client);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -42,38 +42,37 @@ namespace Infrastructure.Persistence.Repositories
         {
             return await _dbContext.Clients.SingleOrDefaultAsync(p => p.Id == id);
         }
-        public async Task UpdateAsync(ClientEntity rawMaterial)
+        public async Task UpdateAsync(ClientEntity client)
         {
             var existingClient = await _dbContext.Clients
-                                                      .SingleOrDefaultAsync(p => p.Id == rawMaterial.Id);
+                                                      .SingleOrDefaultAsync(p => p.Id == client.Id);
             if (existingClient != null)
             {
-                existingClient.Name = rawMaterial.Name;
-                existingClient.Description = rawMaterial.Description;
-                existingClient.SupplierId = rawMaterial.SupplierId;
-                existingClient.Amount = rawMaterial.Amount;
-                existingClient.UoM = rawMaterial.UoM;
-                existingClient.Expiration = rawMaterial.Expiration;
+                existingClient.Name = client.Name;
+                existingClient.CPF = client.CPF;
+                existingClient.Address = client.Address;
+                existingClient.Telephone = client.Telephone;
+                existingClient.Email = client.Email;
 
                 _dbContext.Clients.Update(existingClient);
                 await _dbContext.SaveChangesAsync();
             }
             else
             {
-                throw new InvalidOperationException("Raw material not found.");
+                throw new InvalidOperationException("Client not found.");
             }
         }
 
         public async Task DeleteAsync(int id)
         {
-            var rawMaterial = await _dbContext.Clients.SingleOrDefaultAsync(p => p.Id == id);
+            var client = await _dbContext.Clients.SingleOrDefaultAsync(p => p.Id == id);
 
-            if (rawMaterial == null)
+            if (client == null)
             {
-                throw new InvalidOperationException("Raw material not found.");
+                throw new InvalidOperationException("Client not found.");
             }
 
-            _dbContext.Clients.Remove(rawMaterial);
+            _dbContext.Clients.Remove(client);
             await _dbContext.SaveChangesAsync();
         }
 

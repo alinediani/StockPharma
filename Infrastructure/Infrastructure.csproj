@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="Persistence\Repositories\ProductsRepository.cs" />
+    <None Include="Persistence\Repositories\ProductRepository.cs" />
   </ItemGroup>
 
   <ItemGroup>

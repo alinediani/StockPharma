@@ -26,9 +26,9 @@ namespace Infrastructure.Persistence.Repositories
         }
 
 
-        public async Task AddAsync(OrderEntity rawMaterial)
+        public async Task AddAsync(OrderEntity order)
         {
-            await _dbContext.Orders.AddAsync(rawMaterial);
+            await _dbContext.Orders.AddAsync(order);
             await _dbContext.SaveChangesAsync();
         }
 
@@ -42,38 +42,37 @@ namespace Infrastructure.Persistence.Repositories
         {
             return await _dbContext.Orders.SingleOrDefaultAsync(p => p.Id == id);
         }
-        public async Task UpdateAsync(OrderEntity rawMaterial)
+        public async Task UpdateAsync(OrderEntity order)
         {
             var existingOrder = await _dbContext.Orders
-                                                      .SingleOrDefaultAsync(p => p.Id == rawMaterial.Id);
+                                                      .SingleOrDefaultAsync(p => p.Id == order.Id);
             if (existingOrder != null)
             {
-                existingOrder.Name = rawMaterial.Name;
-                existingOrder.Description = rawMaterial.Description;
-                existingOrder.SupplierId = rawMaterial.SupplierId;
-                existingOrder.Amount = rawMaterial.Amount;
-                existingOrder.UoM = rawMaterial.UoM;
-                existingOrder.Expiration = rawMaterial.Expiration;
+                existingOrder.Client = order.Client;
+                existingOrder.Products = order.Products;
+                existingOrder.Amount = order.Amount;
+                existingOrder.OrderDate = order.OrderDate;
+                existingOrder.TotalCoast = order.TotalCoast;
 
                 _dbContext.Orders.Update(existingOrder);
                 await _dbContext.SaveChangesAsync();
             }
             else
             {
-                throw new InvalidOperationException("Raw material not found.");
+                throw new InvalidOperationException("Order not found.");
             }
         }
 
         public async Task DeleteAsync(int id)
         {
-            var rawMaterial = await _dbContext.Orders.SingleOrDefaultAsync(p => p.Id == id);
+            var order = await _dbContext.Orders.SingleOrDefaultAsync(p => p.Id == id);
 
-            if (rawMaterial == null)
+            if (order == null)
             {
-                throw new InvalidOperationException("Raw material not found.");
+                throw new InvalidOperationException("Order not found.");
             }
 
-            _dbContext.Orders.Remove(rawMaterial);
+            _dbContext.Orders.Remove(order);
             await _dbContext.SaveChangesAsync();
         }
 
