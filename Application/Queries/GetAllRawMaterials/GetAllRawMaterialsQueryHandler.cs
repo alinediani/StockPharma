@@ -1,31 +1,37 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MediatR;
+﻿using Application.Queries.GetAllRawMaterials;
 using Application.ViewModels;
 using Core.Repositories;
+using MediatR;
 
-namespace Application.Queries.GetAllRawMaterials
+public class GetAllRawMaterialsQueryHandler : IRequestHandler<GetAllRawMaterialsQuery, List<RawMaterialsViewModel>>
 {
-    public class GetAllRawMaterialsQueryHandler : IRequestHandler<GetAllRawMaterialsQuery, List<RawMaterialsViewModel>>
+    private readonly IRawMaterialRepository _rawMaterialRepository;
+
+    public GetAllRawMaterialsQueryHandler(IRawMaterialRepository rawMaterialRepository)
     {
-        private readonly IRawMaterialRepository _rawMaterialRepository;
-        public GetAllRawMaterialsQueryHandler(IRawMaterialRepository rawMaterialRepository)
-        {
-            _rawMaterialRepository = rawMaterialRepository;
-        }
+        _rawMaterialRepository = rawMaterialRepository;
+    }
 
-        public async Task<List<RawMaterialsViewModel>> Handle(GetAllRawMaterialsQuery request, CancellationToken cancellationToken)
-        {
-            var rawMaterials = await _rawMaterialRepository.GetAllAsync();
+    public async Task<List<RawMaterialsViewModel>> Handle(GetAllRawMaterialsQuery request, CancellationToken cancellationToken)
+    {
+        var rawMaterials = await _rawMaterialRepository.GetAllAsync();
 
-            var rawMaterialsViewModel = rawMaterials
-                .Select(r => new RawMaterialsViewModel(r.Id,r.Name,r.Description,r.SupplierId,r.Amount,r.UoM,r.Expiration))
-                .ToList();
+        var rawMaterialsViewModel = rawMaterials
+            .Select(r => new RawMaterialsViewModel(
+                r.Id, // Passando o ID da matéria-prima
+                r.Name, // Nome da matéria-prima
+                r.Description, // Descrição da matéria-prima
+                r.SupplierId, // ID do fornecedor
+                r.Amount, // Quantidade disponível
+                r.UoM, // Unidade de medida
+                r.Expiration, // Data de expiração
+                r.ProductRawMaterials.Select(rm => new ProductRawMaterialViewModel(
+                    rm.RawMaterialId, // ID da matéria-prima no produto
+                    rm.RawMaterial.Name, // Nome da matéria-prima no produto
+                    rm.Quantity // Quantidade utilizada no produto
+                )).ToList() // Lista das matérias-primas nos produtos
+            )).ToList();
 
-            return rawMaterialsViewModel;
-        }
+        return rawMaterialsViewModel;
     }
 }

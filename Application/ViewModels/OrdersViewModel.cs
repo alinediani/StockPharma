@@ -5,9 +5,6 @@ namespace Application.ViewModels
 {
     public class OrdersViewModel
     {
-        private ClientsViewModel clientsViewModel;
-        private List<ProductsViewModel> productsViewModels;
-
         public OrdersViewModel(int id, ClientsViewModel client, List<OrderProductViewModel> products, int amount, DateTime orderDate, double totalCoast)
         {
             Id = id;
@@ -26,6 +23,7 @@ namespace Application.ViewModels
         public double TotalCoast { get; set; }
     }
 
+
     public class OrderProductViewModel
     {
         public OrderProductViewModel(int productId, string productName, int quantity)
@@ -37,6 +35,7 @@ namespace Application.ViewModels
 
         public int ProductId { get; set; }
         public string ProductName { get; set; }
-        public int Quantity { get; set; } // Quantidade do produto no pedido
+        public int Quantity { get; set; }
     }
+
 }
