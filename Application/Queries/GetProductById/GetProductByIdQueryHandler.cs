@@ -26,7 +26,11 @@ namespace Application.Queries.GetProductById
                 product.Id,
                 product.Name,
                 product.Description,
-                product.ProductRawMaterials.Select(rm => new RawMaterialsViewModel(rm.RawMaterial.Id, rm.RawMaterial.Name)).ToList(),
+                product.ProductRawMaterials.Select(rm => new ProductRawMaterialViewModel(
+                    rm.RawMaterialId,
+                    rm.RawMaterial.Name,
+                    rm.Quantity
+                )).ToList(),
                 product.Price,
                 product.Amount
             );
@@ -34,4 +38,5 @@ namespace Application.Queries.GetProductById
             return productsViewModel;
         }
     }
+
 }

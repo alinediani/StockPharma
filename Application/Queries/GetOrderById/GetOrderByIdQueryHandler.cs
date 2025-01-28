@@ -24,8 +24,18 @@ namespace Application.Queries.GetOrderById
 
             var ordersViewModel = new OrdersViewModel(
                 order.Id,
-                new ClientsViewModel(order.Client.Id, order.Client.Name, order.Client.CPF, order.Client.Address, order.Client.Telephone, order.Client.Email),
-                order.OrderProducts.Select(op => new ProductsViewModel(op.Product.Id, op.Product.Name, op.Product.Description, op.Product.Price, op.Product.Amount)).ToList(),
+                new ClientsViewModel(
+                    order.Client.Id,
+                    order.Client.Name,
+                    order.Client.CPF,
+                    order.Client.Address,
+                    order.Client.Telephone,
+                    order.Client.Email),
+                order.OrderProducts.Select(op => new OrderProductViewModel(
+                    op.Product.Id,               // ID do produto
+                    op.Product.Name,             // Nome do produto
+                    op.Quantity                  // Quantidade do produto no pedido
+                )).ToList(),
                 order.Amount,
                 order.OrderDate,
                 order.TotalCoast

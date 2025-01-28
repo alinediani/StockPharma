@@ -12,6 +12,7 @@ namespace Application.Queries.GetRawMaterialById
     public class GetRawMaterialByIdQueryHandler : IRequestHandler<GetRawMaterialByIdQuery, RawMaterialsViewModel>
     {
         private readonly IRawMaterialRepository _rawMaterialRepository;
+
         public GetRawMaterialByIdQueryHandler(IRawMaterialRepository rawMaterialRepository)
         {
             _rawMaterialRepository = rawMaterialRepository;
@@ -30,10 +31,16 @@ namespace Application.Queries.GetRawMaterialById
                 rawMaterial.SupplierId,
                 rawMaterial.Amount,
                 rawMaterial.UoM,
-                rawMaterial.Expiration
-                );
+                rawMaterial.Expiration,
+                rawMaterial.ProductRawMaterials.Select(rm => new ProductRawMaterialViewModel(
+                    rm.RawMaterialId,
+                    rm.RawMaterial.Name,
+                    rm.Quantity
+                )).ToList()
+            );
 
             return rawMaterialsViewModel;
         }
     }
+
 }
