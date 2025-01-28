@@ -11,29 +11,28 @@ namespace Application.Queries.GetOrderById
 {
     public class GetOrderByIdQueryHandler : IRequestHandler<GetOrderByIdQuery, OrdersViewModel>
     {
-        private readonly IOrderRepository _rawMaterialRepository;
-        public GetOrderByIdQueryHandler(IOrderRepository rawMaterialRepository)
+        private readonly IOrderRepository _orderRepository;
+        public GetOrderByIdQueryHandler(IOrderRepository orderRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _orderRepository = orderRepository;
         }
 
         public async Task<OrdersViewModel> Handle(GetOrderByIdQuery request, CancellationToken cancellationToken)
         {
-            var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.Id);
+            var order = await _orderRepository.GetByIdAsync(request.Id);
 
-            if (rawMaterial == null) return null;
+            if (order == null) return null;
 
-            var rawMaterialsViewModel = new OrdersViewModel(
-                rawMaterial.Id,
-                rawMaterial.Name,
-                rawMaterial.Description,
-                rawMaterial.SupplierId,
-                rawMaterial.Amount,
-                rawMaterial.UoM,
-                rawMaterial.Expiration
+            var ordersViewModel = new OrdersViewModel(
+                order.Id,
+                order.Client,
+                order.Products,
+                order.Amount,
+                order.OrderDate,
+                order.TotalCoast
                 );
 
-            return rawMaterialsViewModel;
+            return ordersViewModel;
         }
     }
 }

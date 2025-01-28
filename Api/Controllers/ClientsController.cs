@@ -24,9 +24,9 @@ namespace Api.Controllers
         {
             var getAllClientsQuery = new GetAllClientsQuery(query);
 
-            var rawMaterials = await _mediator.Send(getAllClientsQuery);
+            var clients = await _mediator.Send(getAllClientsQuery);
 
-            return Ok(rawMaterials);
+            return Ok(clients);
         }
 
         [HttpPost("/Clients/new")]
@@ -42,24 +42,19 @@ namespace Api.Controllers
         {
             var query = new GetClientByIdQuery(id);
 
-            var rawMaterial = await _mediator.Send(query);
+            var client = await _mediator.Send(query);
 
-            if (rawMaterial == null)
+            if (client == null)
             {
                 return NotFound();
             }
 
-            return Ok(rawMaterial);
+            return Ok(client);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] UpdateClientCommand command)
         {
-            if (command.Description.Length > 200)
-            {
-                return BadRequest();
-            }
-
             await _mediator.Send(command);
 
             return NoContent();

@@ -11,29 +11,28 @@ namespace Application.Queries.GetProductById
 {
     public class GetProductByIdQueryHandler : IRequestHandler<GetProductByIdQuery, ProductsViewModel>
     {
-        private readonly IProductRepository _rawMaterialRepository;
-        public GetProductByIdQueryHandler(IProductRepository rawMaterialRepository)
+        private readonly IProductRepository _productRepository;
+        public GetProductByIdQueryHandler(IProductRepository productRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<ProductsViewModel> Handle(GetProductByIdQuery request, CancellationToken cancellationToken)
         {
-            var rawMaterial = await _rawMaterialRepository.GetByIdAsync(request.Id);
+            var product = await _productRepository.GetByIdAsync(request.Id);
 
-            if (rawMaterial == null) return null;
+            if (product == null) return null;
 
-            var rawMaterialsViewModel = new ProductsViewModel(
-                rawMaterial.Id,
-                rawMaterial.Name,
-                rawMaterial.Description,
-                rawMaterial.SupplierId,
-                rawMaterial.Amount,
-                rawMaterial.UoM,
-                rawMaterial.Expiration
+            var productsViewModel = new ProductsViewModel(
+                product.Id,
+                product.Name,
+                product.Description,
+                product.RawMaterial,
+                product.Price,
+                product.Amount
                 );
 
-            return rawMaterialsViewModel;
+            return productsViewModel;
         }
     }
 }

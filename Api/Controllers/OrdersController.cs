@@ -24,9 +24,9 @@ namespace Api.Controllers
         {
             var getAllOrdersQuery = new GetAllOrdersQuery(query);
 
-            var rawMaterials = await _mediator.Send(getAllOrdersQuery);
+            var orders = await _mediator.Send(getAllOrdersQuery);
 
-            return Ok(rawMaterials);
+            return Ok(orders);
         }
 
         [HttpPost("/Orders/new")]
@@ -42,24 +42,19 @@ namespace Api.Controllers
         {
             var query = new GetOrderByIdQuery(id);
 
-            var rawMaterial = await _mediator.Send(query);
+            var order = await _mediator.Send(query);
 
-            if (rawMaterial == null)
+            if (order == null)
             {
                 return NotFound();
             }
 
-            return Ok(rawMaterial);
+            return Ok(order);
         }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> Put(int id, [FromBody] UpdateOrderCommand command)
         {
-            if (command.Description.Length > 200)
-            {
-                return BadRequest();
-            }
-
             await _mediator.Send(command);
 
             return NoContent();

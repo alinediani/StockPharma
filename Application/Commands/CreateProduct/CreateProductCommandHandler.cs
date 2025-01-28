@@ -20,7 +20,7 @@ namespace Application.Commands.CreateProduct
 
         public async Task<int> Handle(CreateProductCommand request, CancellationToken cancellationToken)
         {
-            var product = new ProductEntity(request.Name, request.Description, request.SupplierId, request.Amount, request.UoM, request.Expiration);
+            var product = new ProductEntity(request.Name, request.Description, request.RawMaterial, request.Price, request.Amount);
 
             await _productRepository.AddAsync(product);
 

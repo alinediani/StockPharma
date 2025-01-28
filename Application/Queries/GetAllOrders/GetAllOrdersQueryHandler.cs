@@ -22,7 +22,7 @@ namespace Application.Queries.GetAllOrders
             var orders = await _orderRepository.GetAllAsync();
 
             var ordersViewModel = orders
-                .Select(r => new OrdersViewModel(r.Id,r.Name,r.Description,r.SupplierId,r.Amount,r.UoM,r.Expiration))
+                .Select(o => new OrdersViewModel(o.Id,o.Client,o.Products,o.Amount,o.OrderDate,o.TotalCoast))
                 .ToList();
 
             return ordersViewModel;

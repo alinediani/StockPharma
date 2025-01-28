@@ -26,11 +26,10 @@ namespace Application.Queries.GetClientById
             var clientsViewModel = new ClientsViewModel(
                 client.Id,
                 client.Name,
-                client.Description,
-                client.SupplierId,
-                client.Amount,
-                client.UoM,
-                client.Expiration
+                client.CPF,
+                client.Address,
+                client.Telephone,
+                client.Email
                 );
 
             return clientsViewModel;

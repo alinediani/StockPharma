@@ -19,7 +19,7 @@ namespace Application.Commands.CreateOrder
 
         public async Task<int> Handle(CreateOrderCommand request, CancellationToken cancellationToken)
         {
-            var order = new OrderEntity(request.Name, request.Description, request.SupplierId, request.Amount, request.UoM, request.Expiration);
+            var order = new OrderEntity(request.Client,request.Products,request.Amount,request.OrderDate,request.TotalCoast);
 
             await _orderRepository.AddAsync(order);
 

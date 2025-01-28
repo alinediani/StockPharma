@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Core.Entities;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,22 +9,21 @@ namespace Application.ViewModels
 {
     public class ProductsViewModel
     {
-        public ProductsViewModel(int id,string name, string description, string supplierId, float amount, int uoM, DateTime expiration)
+        public ProductsViewModel(int id, string name, string description, List<RawMaterialEntity> rawMaterial, double price, int amount)
         {
             Id = id;
             Name = name;
             Description = description;
-            SupplierId = supplierId;
+            RawMaterial = rawMaterial;
+            Price = price;
             Amount = amount;
-            UoM = uoM;
-            Expiration = expiration;
         }
+
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public string SupplierId { get; set; }
-        public float Amount { get; set; }
-        public int UoM { get; set; }
-        public DateTime Expiration { get; set; }
+        public List<RawMaterialEntity> RawMaterial { get; set; }
+        public double Price { get; set; }
+        public int Amount { get; set; }
     }
 }

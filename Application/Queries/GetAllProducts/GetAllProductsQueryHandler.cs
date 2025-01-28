@@ -11,21 +11,21 @@ namespace Application.Queries.GetAllProducts
 {
     public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, List<ProductsViewModel>>
     {
-        private readonly IProductRepository _rawMaterialRepository;
-        public GetAllProductsQueryHandler(IProductRepository rawMaterialRepository)
+        private readonly IProductRepository _productRepository;
+        public GetAllProductsQueryHandler(IProductRepository productRepository)
         {
-            _rawMaterialRepository = rawMaterialRepository;
+            _productRepository = productRepository;
         }
 
         public async Task<List<ProductsViewModel>> Handle(GetAllProductsQuery request, CancellationToken cancellationToken)
         {
-            var rawMaterials = await _rawMaterialRepository.GetAllAsync();
+            var products = await _productRepository.GetAllAsync();
 
-            var rawMaterialsViewModel = rawMaterials
-                .Select(r => new ProductsViewModel(r.Id,r.Name,r.Description,r.SupplierId,r.Amount,r.UoM,r.Expiration))
+            var productsViewModel = products
+                .Select(p => new ProductsViewModel(p.Id,p.Name,p.Description,p.RawMaterial,p.Price,p.Amount))
                 .ToList();
 
-            return rawMaterialsViewModel;
+            return productsViewModel;
         }
     }
 }

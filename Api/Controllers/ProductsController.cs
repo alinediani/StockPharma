@@ -24,9 +24,9 @@ namespace Api.Controllers
         {
             var getAllProductsQuery = new GetAllProductsQuery(query);
 
-            var rawMaterials = await _mediator.Send(getAllProductsQuery);
+            var products = await _mediator.Send(getAllProductsQuery);
 
-            return Ok(rawMaterials);
+            return Ok(products);
         }
 
         [HttpPost("/Products/new")]
@@ -42,14 +42,14 @@ namespace Api.Controllers
         {
             var query = new GetProductByIdQuery(id);
 
-            var rawMaterial = await _mediator.Send(query);
+            var product = await _mediator.Send(query);
 
-            if (rawMaterial == null)
+            if (product == null)
             {
                 return NotFound();
             }
 
-            return Ok(rawMaterial);
+            return Ok(product);
         }
 
         [HttpPut("{id}")]

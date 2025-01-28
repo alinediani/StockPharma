@@ -22,7 +22,7 @@ namespace Application.Queries.GetAllClients
             var clients = await _clientRepository.GetAllAsync();
 
             var clientsViewModel = clients
-                .Select(r => new ClientsViewModel(r.Id,r.Name,r.Description,r.SupplierId,r.Amount,r.UoM,r.Expiration))
+                .Select(c => new ClientsViewModel(c.Id,c.Name,c.CPF,c.Address,c.Telephone,c.Email))
                 .ToList();
 
             return clientsViewModel;
