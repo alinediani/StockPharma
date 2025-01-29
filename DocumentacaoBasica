@@ -1,0 +1,79 @@
+# Documentação do Sistema StockPharma
+
+## 1. Visão Geral
+O **StockPharma** é um sistema de gerenciamento de estoque e pedidos para uma farmácia. Ele permite o controle de clientes, produtos, pedidos e matérias-primas utilizadas na fabricação.
+
+O sistema segue a arquitetura **CQRS (Command Query Responsibility Segregation)**, utilizando **Mediator** para a comunicação entre componentes e **Repository Pattern** para a abstração do acesso ao banco de dados.
+
+## 2. Tecnologias Utilizadas
+- **Backend:** .NET Core com C#
+- **Frontend:** MudBlazor (Blazor)
+- **Banco de Dados:** SQL Server
+- **ORM:** Entity Framework Core
+- **Arquitetura:** CQRS, Mediator, Repository Pattern
+
+## 3. Modelo de Dados
+O sistema possui as seguintes tabelas principais:
+
+### **Clientes (Clients)**
+- Id
+- Name
+- CPF
+- Address
+- Telephone
+- Email
+
+### **Pedidos (Orders)**
+- Id
+- ClientId (chave estrangeira para Clients)
+- Amount
+- OrderDate
+- TotalCoast
+
+### **Produtos (Products)**
+- Id
+- Name
+- Description
+- Price
+- Amount
+
+### **Matérias-Primas (RawMaterials)**
+- Id
+- Name
+- Description
+- SupplierId
+- Amount
+- UoM
+- Expiration
+
+### **Relacionamentos**
+- **OrderProducts** (Pedidos e Produtos)
+- **ProductRawMaterials** (Produtos e Matérias-Primas)
+
+## 4. Fluxo de Funcionamento
+- **Consultas (Queries)**: Obtêm dados do sistema, como listar clientes, pedidos e produtos.
+- **Comandos (Commands)**: Criam, atualizam ou excluem dados do sistema.
+- **Mediator** gerencia a comunicação entre as camadas, garantindo um código desacoplado.
+
+## 5. Configuração e Execução Local
+### 1. Ligar o SQL Server
+Certifique-se de que o SQL Server está ativo na máquina local.
+
+### 2. Executar a Aplicação
+1. Extraia o arquivo `publish.rar`.
+2. Execute o sistema a partir da pasta extraída.
+
+### 3. Configurar a Conexão com o Banco de Dados
+1. Abra `appsettings.json`.
+2. Edite a string de conexão conforme seu ambiente.
+
+### 4. Configurar o Banco de Dados
+Execute o script SQL `Script StockPharma.sql` no SQL Server para criar e popular o banco de dados.
+
+## 6. Endpoints da API
+Caso o sistema tenha uma API, aqui seriam listados os endpoints disponíveis.
+
+## 7. Telas do Sistema
+O frontend, desenvolvido com MudBlazor, fornece uma interface moderna e responsiva para o gerenciamento do estoque e pedidos.
+
+
