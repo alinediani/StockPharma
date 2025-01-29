@@ -1,7 +1,9 @@
 ﻿@page "/Products/new"
-@using System.ComponentModel.DataAnnotations
 @using FrontEnd.Models
+@using System.Net.Http.Json
 @inject HttpClient httpClient
+@inject MudBlazor.ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 
 <h3>Cadastro de novo produto</h3>
 
@@ -12,22 +14,56 @@
             <MudCard>
                 <MudCardContent>
                     <MudTextField Label="Nome" HelperText="Min. 4 caracteres"
-                                  @bind-Value="newProduct.Name" For="@(() => newProduct.Name)" />
+                    @bind-Value="newProduct.Name" For="@(() => newProduct.Name)" />
                     <MudTextField Label="Descrição" Class="mt-3"
-                                  @bind-Value="newProduct.Description" For="@(() => newProduct.Description)" />
+                    @bind-Value="newProduct.Description" For="@(() => newProduct.Description)" />
                     <MudTextField Label="Quantidade" HelperText="Adicione a quantidade desse produto" Class="mt-3"
-                                  @bind-Value="newProduct.Amount" For="@(() => newProduct.Amount)" InputType="InputType.Number" />
+                    @bind-Value="newProduct.Amount" For="@(() => newProduct.Amount)" InputType="InputType.Number" />
                     <MudTextField Label="Preço" HelperText="Adicione o valor do produto" Class="mt-3"
-                                  @bind-Value="newProduct.Price" For="@(() => newProduct.Price)" InputType="InputType.Number" />
+                    @bind-Value="newProduct.Price" For="@(() => newProduct.Price)" InputType="InputType.Number" />
                 </MudCardContent>
                 <MudCardActions>
                     <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Cadastrar</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>
+
         <MudItem xs="12" sm="5">
             <MudPaper Class="pa-4 mud-height-full">
-                <MudText Typo="Typo.subtitle2">Resumo de Validação</MudText>
+                <MudText Typo="Typo.subtitle2">Escolha as matérias-primas</MudText>
+
+                <!-- MudChipSet com seleção múltipla -->
+                <MudChipSet T="RawMaterial" SelectionMode="SelectionMode.MultiSelection" @bind-Value="selectedRawMaterials" Color="Color.Primary">
+                    @foreach (var rawMaterial in rawMaterialsList)
+                    {
+                        <MudChip OnClick="@(() => AddRawMaterial(rawMaterial.Id))" Text="@rawMaterial.Name" Variant="Variant.Filled" Color="Color.Info">
+                            @rawMaterial.Name
+                        </MudChip>
+                    }
+                </MudChipSet>
+
+                <!-- Exibir as matérias-primas selecionadas -->
+                <MudText Typo="Typo.subtitle2" Class="mt-3">Matérias-primas selecionadas</MudText>
+
+
+                <MudChipSet T="RawMaterial" SelectionMode="SelectionMode.MultiSelection" @bind-Value="selectedRawMaterials" Color="Color.Primary">
+                    @foreach (var rawMaterial in rawMaterials)
+                    {
+                        <MudChip OnClick="@(() => DeleteRawMaterial(rawMaterial.Id))" Text="@rawMaterial.Name" Variant="Variant.Filled" Color="Color.Info">
+                            @rawMaterial.Name
+                        </MudChip>
+                    }
+                </MudChipSet>
+
+                @* <MudChipSet> *@
+                @*     @foreach (var selectedRawMaterial in selectedRawMaterials) *@
+                @*     { *@
+                @*         <MudChip Closeable="true" OnClick="@(() => RemoveRawMaterial(selectedRawMaterial))"> *@
+                @*             @selectedRawMaterial.Name *@
+                @*         </MudChip> *@
+                @*     } *@
+                @* </MudChipSet> *@
+
                 @if (success)
                 {
                     <MudText Color="Color.Success">Produto cadastrado com sucesso!</MudText>
@@ -45,14 +81,66 @@
             </MudPaper>
         </MudItem>
     </MudGrid>
-
 </EditForm>
 
 @code {
     Product newProduct = new Product();
-
     bool success;
     bool error;
+
+    List<RawMaterial> rawMaterials = new List<RawMaterial>();
+
+    private async void AddRawMaterial(int rmId)
+    {
+        foreach(RawMaterial rawMaterial in rawMaterials)
+        {
+            if(rawMaterial.Id == rmId)
+            {
+                return;
+            }
+        }
+        var response = await httpClient.GetFromJsonAsync<RawMaterial>($"https://localhost:7008/api/RawMaterials/{rmId}");
+        if (response == null)
+        {
+            return;
+        }
+        rawMaterials.Add(response);
+        StateHasChanged();
+    }
+
+    private void DeleteRawMaterial(int rmId)
+    {
+        var rawMaterialToDelete = rawMaterials.FirstOrDefault(rm => rm.Id == rmId);
+        if (rawMaterialToDelete != null)
+        {
+            rawMaterials.Remove(rawMaterialToDelete);
+            StateHasChanged();
+        }
+    }
+
+
+
+    // Lista de matérias-primas disponíveis
+    List<RawMaterial> rawMaterialsList = new List<RawMaterial>();
+
+    // Lista de matérias-primas selecionadas
+    List<RawMaterial> selectedRawMaterials = new List<RawMaterial>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Carregar as matérias-primas da API (ajustar a URL conforme necessário)
+        rawMaterialsList = await httpClient.GetFromJsonAsync<List<RawMaterial>>("https://localhost:7008/api/RawMaterials?query=BuscaRawMaterial");
+
+        if (rawMaterialsList == null)
+        {
+            rawMaterialsList = new List<RawMaterial>();
+        }
+    }
+
+    private void RemoveRawMaterial(RawMaterial rawMaterial)
+    {
+        selectedRawMaterials.Remove(rawMaterial);
+    }
 
     private async Task OnValidSubmit(EditContext context)
     {
@@ -61,7 +149,12 @@
 
         try
         {
-            var response = await httpClient.PostAsJsonAsync("https://localhost:7008/RawMaterials/new", newProduct);
+            // Criar o produto e passar as matérias-primas selecionadas
+            newProduct.RawMaterials = rawMaterials;
+
+            ProductInsert productInsert = ProductMapper.ConvertToProductInsert(newProduct);
+
+            var response = await httpClient.PostAsJsonAsync("https://localhost:7008/Products/new", productInsert);
 
             if (response.IsSuccessStatusCode)
             {
@@ -79,6 +172,4 @@
 
         StateHasChanged();
     }
-
-   
 }

@@ -20,4 +20,10 @@ namespace FrontEnd.Models
 
 
     }
+
+        public class RawMaterialSelection
+        {
+            public int RawMaterialId { get; set; }
+        }
+
 }

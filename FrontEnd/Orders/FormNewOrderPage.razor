@@ -1,90 +1,131 @@
-﻿@page "/Orders/new"
-
-@using System.ComponentModel.DataAnnotations
+﻿@page "/Orders/New"
 @using FrontEnd.Models
+@using System.Net.Http.Json
 @inject HttpClient httpClient
+@inject MudBlazor.ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+@using FrontEnd.Repositories
+@inject OrderInMemoryRepositry Memory
 
-<h3>Cadastro de Novo Pedido</h3>
+<h3>Criar Novo Pedido</h3>
 
-<EditForm Model="@newOrder" OnValidSubmit="OnValidSubmit">
+<EditForm Model="@newOrder" OnSubmit="OnValidSubmit">
     <DataAnnotationsValidator />
     <MudGrid>
         <MudItem xs="12" sm="7">
             <MudCard>
                 <MudCardContent>
-                    <!-- Autocomplete para Cliente -->
-                    <MudAutocomplete T="Client" Label="Cliente" Placeholder="Selecione um cliente"
-                                     @bind-Value="newOrder.Client" Items="@clients"
-                                     ToStringFunc="@(client => client?.Name)" />
+                    <MudDatePicker Label="Data do pedido" Editable="true" @bind-Date="_date" Placeholder="Selecione a data do pedido" />
 
-                    <!-- Adicione seus produtos manualmente, sem MudSelect -->
-                    <MudTextField Label="Produtos (digite os produtos manualmente)" @bind-Value="productsInput" />
-
-                    <MudTextField Label="Data de Criação" @bind-Value="newOrder.CreatedDate" InputType="InputType.Date" />
-                    <MudTextField Label="Valor Total" @bind-Value="newOrder.TotalValue" InputType="InputType.Number" Disabled />
+                    <MudText Typo="Typo.subtitle2" Class="mt-3">Selecione o Cliente</MudText>
+                    <MudSelect T="Client" @bind-Value="newOrder.Client" Label="Escolha um Cliente" Class="mt-2">
+                        @foreach (var client in Clients)
+                        {
+                            <MudSelectItem T="Client" Value="@client">@client.Name</MudSelectItem>
+                        }
+                    </MudSelect>
                 </MudCardContent>
                 <MudCardActions>
-                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">
-                        Cadastrar
-                    </MudButton>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Cadastrar Pedido</MudButton>
                 </MudCardActions>
             </MudCard>
         </MudItem>
+
         <MudItem xs="12" sm="5">
             <MudPaper Class="pa-4 mud-height-full">
-                <MudText Typo="Typo.subtitle2">Resumo</MudText>
-                <MudText>Cliente: @newOrder.Client?.Name</MudText>
-                <MudText>Produtos:</MudText>
-                <ul>
-                    <!-- Lista de produtos selecionados -->
-                    @foreach (var product in selectedProducts)
+                <MudText Typo="Typo.subtitle2">Selecione os Produtos</MudText>
+
+                <!-- MudChipSet para seleção múltipla de produtos -->
+                <MudChipSet T="Product" SelectionMode="SelectionMode.MultiSelection" @bind-Value="selectedProducts" Color="Color.Primary" Class="mt-3">
+                    @foreach (var product in Products)
                     {
-                        <li>@product.Name (@product.Price)</li>
+                        <MudChip OnClick="@(() => ToggleProductSelection(product))" Text="@product.Name" Variant="Variant.Filled" Color="Color.Info">
+                            @product.Name
+                        </MudChip>
                     }
-                </ul>
-                <MudText>Valor Total: R$ @newOrder.TotalValue.ToString("F2")</MudText>
+                </MudChipSet>
+
+                <MudText Typo="Typo.subtitle2" Class="mt-3">Valor Total</MudText>
+                <MudTextField Label="Valor Total" @bind-Value="newOrder.TotalValue" InputType="InputType.Number" Disabled="true" />
             </MudPaper>
         </MudItem>
     </MudGrid>
 </EditForm>
-
 @code {
-    private Order newOrder = new Order { CreatedDate = DateTime.Now };
-    private List<Client> clients = new();
-    private List<Product> products = new();
-    private List<Product> selectedProducts = new();
-    private string productsInput = string.Empty;
+    private Order newOrder = new Order();
+    private List<Product> Products = new List<Product>();
+    private List<Client> Clients = new List<Client>();
+    private List<Product> selectedProducts = new List<Product>();  // Lista de produtos selecionados
+    private DateTime? _date = DateTime.Today;  // Usando DateTime? para permitir null
 
     protected override async Task OnInitializedAsync()
     {
-        // Carrega clientes e produtos da API
-        clients = await httpClient.GetFromJsonAsync<List<Client>>("https://localhost:7008/Clients/all");
-        products = await httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7008/Products/all");
+        // Carregar Produtos e Clientes da API
+        try
+        {
+            Products = await httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7008/api/Products?query=buscaProdutos");
+            Clients = await httpClient.GetFromJsonAsync<List<Client>>("https://localhost:7008/api/Clients?query=busca");
+        }
+        catch (Exception ex)
+        {
+            Snackbar.Add($"Erro ao carregar dados do servidor: {ex.Message}", Severity.Error);
+        }
+
+        // Verifica se os dados não foram carregados corretamente e inicializa como listas vazias
+        if (Products == null) Products = new List<Product>();
+        if (Clients == null) Clients = new List<Client>();
+
+        // Inicializar o pedido com um Cliente padrão
+        newOrder.Client = Clients.FirstOrDefault();
+        newOrder.CreatedDate = DateTime.Today;  // Inicializa com a data de hoje
     }
 
-    private void OnSelectedProductsChanged()
+    private void ToggleProductSelection(Product product)
     {
-        // Aqui, manualmente, você pode adicionar os produtos selecionados ao pedido
-        // para fins de simplificação. Caso queira adicionar manualmente, modifique o fluxo.
-        selectedProducts = products.Where(p => p.Name.Contains(productsInput)).ToList();
-        newOrder.TotalValue = selectedProducts.Sum(p => p.Price); // Atualiza o valor total
+        // Adiciona ou remove o produto da lista de selecionados
+        if (selectedProducts.Contains(product))
+        {
+            selectedProducts.Remove(product);
+        }
+        else
+        {
+            selectedProducts.Add(product);
+        }
+        CalculateTotalValue();  // Atualiza o valor total após seleção/deseleção
+    }
+
+    private void CalculateTotalValue()
+    {
+        // Calcular o valor total com base nos produtos selecionados
+        newOrder.TotalValue = selectedProducts.Sum(p => p.Price);
     }
 
     private async Task OnValidSubmit()
     {
-        // Calcula o valor total
-        newOrder.Products = selectedProducts;
-        newOrder.TotalValue = selectedProducts.Sum(p => p.Price);
-
-        var response = await httpClient.PostAsJsonAsync("https://localhost:7008/Orders/new", newOrder);
-
-        if (response.IsSuccessStatusCode)
+        // Verificar se há produtos selecionados
+        if (selectedProducts.Any())
         {
-            Console.WriteLine("Pedido cadastrado com sucesso!");
+            // Garantir que a data não seja nula
+            newOrder.CreatedDate = _date ?? DateTime.Now; // Se _date for nulo, atribui DateTime.Now
+            newOrder.Products = selectedProducts;
+
+            Memory.Add(newOrder);
+            // Enviar o pedido via API
+            var response = true;
+
+            if (response)
+            {
+                Snackbar.Add("Pedido criado com sucesso!", Severity.Success);
+                NavigationManager.NavigateTo("/");
+            }
+            else
+            {
+                Snackbar.Add("Erro ao criar pedido. Tente novamente.", Severity.Error);
+            }
         }
         else
         {
-            Console.WriteLine("Erro ao cadastrar o pedido.");
+            Snackbar.Add("Por favor, selecione pelo menos um produto.", Severity.Error);
         }
     }
 }

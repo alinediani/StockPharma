@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(StockPharmaDbContext))]
-    [Migration("20250129021258_SPMigrations")]
+    [Migration("20250129040611_SPMigrations")]
     partial class SPMigrations
     {
         /// <inheritdoc />
@@ -144,11 +144,11 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Core.Entities.ProductRawMaterialEntity", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("ProductRawMaterialId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ProductRawMaterialId"));
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -159,7 +159,7 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("RawMaterialId")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("ProductRawMaterialId");
 
                     b.HasIndex("ProductId");
 
