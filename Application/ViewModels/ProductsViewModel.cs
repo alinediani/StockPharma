@@ -30,4 +30,10 @@ namespace Application.ViewModels
         public int RawMaterialId { get; set; }
         public float Quantity { get; set; }
     }
+    public class ProductUpdateViewModel
+    {
+        public int Id { get; set; }  // ProductId
+        public int Quantity { get; set; }  // Se você precisar atualizar a quantidade
+    }
+
 }
