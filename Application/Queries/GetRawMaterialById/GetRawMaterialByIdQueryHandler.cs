@@ -33,7 +33,9 @@ namespace Application.Queries.GetRawMaterialById
                 rawMaterial.UoM,
                 rawMaterial.Expiration,
                 rawMaterial.ProductRawMaterials.Select(rm => new ProductRawMaterialViewModel(
+                    rm.ProductRawMaterialId,
                     rm.RawMaterialId,
+                    rm.RawMaterial.Name,
                     rm.Quantity
                 )).ToList()
             );
