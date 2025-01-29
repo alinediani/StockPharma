@@ -22,8 +22,6 @@ namespace Infrastructure.Persistence.Configurations
                    .WithMany(p => p.OrderProducts)
                    .HasForeignKey(op => op.ProductId)
                    .OnDelete(DeleteBehavior.Cascade);
-
-            builder.HasIndex(op => new { op.OrderId, op.ProductId }).IsUnique();
         }
     }
 }

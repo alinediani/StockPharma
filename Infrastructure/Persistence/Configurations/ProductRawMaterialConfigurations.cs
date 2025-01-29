@@ -13,8 +13,6 @@ namespace Infrastructure.Persistence.Configurations
             builder.Property(pr => pr.ProductRawMaterialId)
                 .ValueGeneratedOnAdd(); 
 
-            builder.HasIndex(pr => new { pr.ProductId, pr.RawMaterialId }).IsUnique();
-
             builder.HasOne(pr => pr.Product)
                    .WithMany(p => p.ProductRawMaterials)
                    .HasForeignKey(pr => pr.ProductId)
