@@ -22,8 +22,9 @@ namespace Infrastructure.Persistence.Repositories
         public async Task<List<ProductEntity>> GetAllAsync()
         {
             return await _dbContext.Products
-                                   .Include(p => p.ProductRawMaterials)
-                                   .ToListAsync();
+                           .Include(p => p.ProductRawMaterials)
+                               .ThenInclude(prm => prm.RawMaterial) // Inclui o RawMaterial relacionado
+                           .ToListAsync();
         }
 
         public async Task AddAsync(ProductEntity product)
