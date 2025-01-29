@@ -13,8 +13,9 @@ namespace Application.Commands.UpdateProduct
         public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
-        public List<RawMaterialEntity> RawMaterial { get; set; }
+        public List<ProductRawMaterialViewModel> RawMaterials { get; set; }
         public double Price { get; set; }
         public int Amount { get; set; }
     }
+
 }

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Core.Repositories;
 using Core.Entities;
@@ -19,6 +20,7 @@ namespace Application.Commands.UpdateProduct
 
         public async Task<Unit> Handle(UpdateProductCommand request, CancellationToken cancellationToken)
         {
+            // Obtém o produto a ser atualizado
             var product = await _productRepository.GetByIdAsync(request.Id);
 
             if (product == null)
@@ -26,38 +28,38 @@ namespace Application.Commands.UpdateProduct
                 throw new InvalidOperationException("Product not found.");
             }
 
+            // Atualiza os campos do produto
             product.Name = request.Name;
             product.Description = request.Description;
             product.Price = request.Price;
             product.Amount = request.Amount;
 
-            var currentRawMaterials = product.ProductRawMaterials;
-            var updatedRawMaterials = request.RawMaterial;
+            // Limpeza e atualização dos materiais-primas
+            var currentRawMaterials = product.ProductRawMaterials.ToList();
 
-            foreach (var current in currentRawMaterials)
+            // Identifica e adiciona novos materiais-primas
+            var rawMaterialsToAdd = request.RawMaterials
+                .Where(updated => !currentRawMaterials.Any(current => current.RawMaterialId == updated.RawMaterialId))
+                .ToList();
+
+            var newProductRawMaterials = rawMaterialsToAdd.Select(updated => new ProductRawMaterialEntity
             {
-                if (!updatedRawMaterials.Any(u => u.Id == current.RawMaterialId))
-                {
-                    await _productRawMaterialRepository.DeleteProductRawMaterialAsync(product.Id, current.RawMaterialId);
-                }
+                ProductId = product.Id,
+                RawMaterialId = updated.RawMaterialId,
+                Quantity = updated.Quantity // Agora usando quantidade do modelo
+            }).ToList();
+
+            // Adiciona novos materiais-primas no repositório
+            if (newProductRawMaterials.Any())
+            {
+                await _productRawMaterialRepository.AddProductRawMaterialAsync(newProductRawMaterials);
             }
 
-            foreach (var updated in updatedRawMaterials)
-            {
-                if (!currentRawMaterials.Any(c => c.RawMaterialId == updated.Id))
-                {
-                    var newRelation = new ProductRawMaterialEntity
-                    {
-                        ProductId = product.Id,
-                        RawMaterialId = updated.Id
-                    };
-                    await _productRawMaterialRepository.AddProductRawMaterialAsync(newRelation);
-                }
-            }
-
+            // Atualiza o produto no repositório
             await _productRepository.UpdateAsync(product);
 
             return Unit.Value;
         }
     }
+
 }
