@@ -51,7 +51,8 @@ namespace Infrastructure.Persistence.Repositories
         public async Task<ProductEntity> GetByIdAsync(int id)
         {
             return await _dbContext.Products
-                                   .Include(p => p.ProductRawMaterials) // Inclui as relações de matérias-primas
+                                   .Include(p => p.ProductRawMaterials)
+                                   .ThenInclude(prm => prm.RawMaterial)// Inclui as relações de matérias-primas
                                    .SingleOrDefaultAsync(p => p.Id == id);
         }
 
