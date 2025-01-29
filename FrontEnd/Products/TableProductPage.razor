@@ -3,6 +3,9 @@
 @using FrontEnd.Models
 @using System.Net.Http.Json
 @inject HttpClient httpClient
+@inject NavigationManager NavigationManager
+
+<MudButton OnClick="@(() => ToNewProduct())" Variant="Variant.Outlined" Color="Color.Primary">Adiconar novo Produto</MudButton>
 
 <MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Product, bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
     <ToolBarContent>
@@ -22,8 +25,7 @@
         <MudTd DataLabel="Descrição">@context.Description</MudTd>
         <MudTd DataLabel="Fornecedor">@context.Price</MudTd>
         <MudTd DataLabel="Quantidade">@context.Amount</MudTd>
-        <MudTd DataLabel=""><MudButton>Editar</MudButton></MudTd>
-        <MudTd DataLabel=""><MudButton>Deletar</MudButton></MudTd>
+        <MudTd DataLabel=""><MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="@(() => DeleteById(context.Id))">Deletar</MudButton></MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager />
@@ -48,6 +50,11 @@
     private bool bordered = false;
     private string searchString1 = "";
 
+    private void ToNewProduct()
+    {
+        NavigationManager.NavigateTo("/Products/new");
+    }
+
     private Product selectedItem1 = null;
     private HashSet<Product> selectedItems = new HashSet<Product>();
 
@@ -55,14 +62,18 @@
 
     protected override async Task OnInitializedAsync()
     {
-        Elements = new List<Product>();
+        Elements = await httpClient.GetFromJsonAsync<List<Product>>("https://localhost:7008/api/Products?query=buscaProdutos");
 
         if (Elements == null)
         {
             Elements = new List<Product>();
         }
     }
-
+    private void DeleteById(int id)
+    {
+        //add url de exclusão
+        StateHasChanged();
+    }
 
     private bool FilterFunc1(Product element) => FilterFunc(element, searchString1);
 

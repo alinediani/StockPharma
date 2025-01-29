@@ -6,7 +6,7 @@
 @inject MudBlazor.ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 
-<MudButton OnClick="@(() => ToNewRawMaterial())">Adiconar nova Materia Prima</MudButton>
+<MudButton OnClick="@(() => ToNewRawMaterial())" Variant="Variant.Outlined" Color="Color.Primary">Adiconar nova Materia Prima</MudButton>
 
 <MudTable Items="@Elements" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<RawMaterial, bool>(FilterFunc1)" @bind-SelectedItem="selectedItem1">
     <ToolBarContent>
@@ -28,8 +28,8 @@
         <MudTd DataLabel="Fornecedor">@context.SupplierId</MudTd>
         <MudTd DataLabel="Validade">@context.Expiration</MudTd>
         <MudTd DataLabel="Quantidade">@context.Amount</MudTd>
-        <MudTd DataLabel=""><MudButton OnClick="@(() => OnEditById(context.Id))">Editar</MudButton></MudTd>
-        <MudTd DataLabel=""><MudButton OnClick="@(() => OnDeleteById(context.Id))">Deletar</MudButton></MudTd>
+        <MudTd DataLabel=""><MudButton OnClick="@(() => OnEditById(context.Id))" Variant="Variant.Outlined" Color="Color.Warning">Editar</MudButton></MudTd>
+        <MudTd DataLabel=""><MudButton OnClick="@(() => OnDeleteById(context.Id))" Variant="Variant.Outlined" Color="Color.Error">Deletar</MudButton></MudTd>
     </RowTemplate>
     <PagerContent>
         <MudTablePager />

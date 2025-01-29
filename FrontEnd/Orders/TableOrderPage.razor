@@ -1,15 +1,22 @@
-﻿@page "/Orders/all"
+﻿@page "/"
 
 @using FrontEnd.Models
 @inject HttpClient httpClient
+@using FrontEnd.Repositories
+@inject MudBlazor.ISnackbar Snackbar
+@inject OrderInMemoryRepositry Memory
+@inject NavigationManager NavigationManager
+
+<MudButton OnClick="@(() => ToNewOrder())" Variant="Variant.Outlined" Color="Color.Primary">Adiconar novo Pedido</MudButton>
+
 
 <MudTable Items="@orders" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped">
     <ToolBarContent>
         <MudText Typo="Typo.h6">Lista de Pedidos</MudText>
         <MudSpacer />
         <MudTextField @bind-Value="searchString" Placeholder="Pesquisar por Cliente ou Produto"
-                      Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
-                      IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        Adornment="Adornment.Start" AdornmentIcon="@Icons.Material.Filled.Search"
+        IconSize="Size.Medium" Class="mt-0"></MudTextField>
     </ToolBarContent>
     <HeaderContent>
         <MudTh>ID</MudTh>
@@ -33,8 +40,7 @@
             </ul>
         </MudTd>
         <MudTd DataLabel="Ações">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mr-2">Editar</MudButton>
-            <MudButton Variant="Variant.Outlined" Color="Color.Error">Deletar</MudButton>
+            <MudButton Variant="Variant.Outlined" Color="Color.Error" OnClick="@(() => DeleteById(context.Id))">Deletar</MudButton>
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -57,11 +63,28 @@
     private bool bordered = false;
     private string searchString = "";
 
+    private void DeleteById(int id)
+    {
+        var item = Memory.GetById(id);
+        if(item == null)
+        {
+            return;
+        }
+        else
+        {
+            Snackbar.Add("Pedido excluido com sucesso!", Severity.Warning);
+            Memory.Delete(id);
+        }
+    }
+    public void ToNewOrder(){
+        NavigationManager.NavigateTo("/Orders/New");
+    }
+
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            orders = await httpClient.GetFromJsonAsync<List<Order>>("https://localhost:7008/Orders/all");
+            orders = Memory.GetAll();
         }
         catch (Exception ex)
         {

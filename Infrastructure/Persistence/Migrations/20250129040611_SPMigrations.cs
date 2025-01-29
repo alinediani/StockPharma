@@ -88,7 +88,7 @@ namespace Infrastructure.Persistence.Migrations
                 name: "ProductRawMaterials",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    ProductRawMaterialId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     RawMaterialId = table.Column<int>(type: "int", nullable: false),
@@ -96,7 +96,7 @@ namespace Infrastructure.Persistence.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductRawMaterials", x => x.Id);
+                    table.PrimaryKey("PK_ProductRawMaterials", x => x.ProductRawMaterialId);
                     table.ForeignKey(
                         name: "FK_ProductRawMaterials_Products_ProductId",
                         column: x => x.ProductId,

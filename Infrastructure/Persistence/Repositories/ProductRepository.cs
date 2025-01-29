@@ -23,7 +23,7 @@ namespace Infrastructure.Persistence.Repositories
         {
             return await _dbContext.Products
                            .Include(p => p.ProductRawMaterials)
-                               .ThenInclude(prm => prm.RawMaterial) // Inclui o RawMaterial relacionado
+                           .ThenInclude(prm => prm.RawMaterial) 
                            .ToListAsync();
         }
 

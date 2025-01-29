@@ -6,7 +6,7 @@
 @inject MudBlazor.ISnackbar Snackbar
 @inject NavigationManager NavigationManager
 
-<MudButton OnClick="@(() => ToNewClient())">Adiconar nova Materia Prima</MudButton>
+<MudButton OnClick="@(() => ToNewClient())" Variant="Variant.Outlined" Color="Color.Primary">Adiconar nova Cliente</MudButton>
 
 <MudTable Items="@Clients" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Client, bool>(FilterFunc1)" @bind-SelectedItem="selectedClient">
     <ToolBarContent>
@@ -29,8 +29,8 @@
         <MudTd DataLabel="Telefone">@context.Telephone</MudTd>
         <MudTd DataLabel="Email">@context.Email</MudTd>
         <MudTd DataLabel="Ações">
-        <MudTd DataLabel=""><MudButton OnClick="@(() => OnEditById(context.Id))">Editar</MudButton></MudTd>
-        <MudTd DataLabel=""><MudButton OnClick="@(() => OnDeleteById(context.Id))">Deletar</MudButton></MudTd>
+            <MudTd DataLabel=""><MudButton OnClick="@(() => OnEditById(context.Id))" Variant="Variant.Outlined" Color="Color.Warning">Editar</MudButton></MudTd>
+            <MudTd DataLabel=""><MudButton OnClick="@(() => OnDeleteById(context.Id))" Variant="Variant.Outlined" Color="Color.Error">Deletar</MudButton></MudTd>
         </MudTd>
     </RowTemplate>
     <PagerContent>
