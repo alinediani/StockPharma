@@ -20,6 +20,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task AddProductRawMaterialAsync(ProductRawMaterialEntity productRawMaterial)
         {
+            productRawMaterial.ProductRawMaterialId = 0;
             await _dbContext.ProductRawMaterials.AddAsync(productRawMaterial);
             await _dbContext.SaveChangesAsync();
         }
