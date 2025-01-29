@@ -28,32 +28,29 @@ namespace Application.Commands.UpdateProduct
                 throw new InvalidOperationException("Product not found.");
             }
 
-            // Atualiza os campos simples do produto
+            // Atualiza os campos do produto
             product.Name = request.Name;
             product.Description = request.Description;
             product.Price = request.Price;
             product.Amount = request.Amount;
 
-            // Atualiza os materiais-primas do produto
-            var currentRawMaterials = product.ProductRawMaterials.ToList();
+            var currentRawMaterials = product.ProductRawMaterials.ToList(); // Crie uma cópia da lista de materiais-primas
 
-            // Remover materiais-primas que não estão mais presentes
+            // Identificar e remover materiais-primas que não estão mais no pedido
             var rawMaterialsToRemove = currentRawMaterials
                 .Where(current => !request.RawMaterials.Any(updated => updated.RawMaterialId == current.RawMaterialId))
                 .ToList();
 
-            // Deleta os materiais-primas removidos
             foreach (var rawMaterialToRemove in rawMaterialsToRemove)
             {
                 await _productRawMaterialRepository.DeleteProductRawMaterialAsync(product.Id, rawMaterialToRemove.RawMaterialId);
             }
 
-            // Identifica novos materiais-primas a serem adicionados
+            // Identificar e adicionar novos materiais-primas
             var rawMaterialsToAdd = request.RawMaterials
                 .Where(updated => !currentRawMaterials.Any(current => current.RawMaterialId == updated.RawMaterialId))
                 .ToList();
 
-            // Adiciona os novos materiais-primas
             foreach (var material in rawMaterialsToAdd)
             {
                 var newProductRawMaterial = new ProductRawMaterialEntity
@@ -71,6 +68,8 @@ namespace Application.Commands.UpdateProduct
             return Unit.Value;
         }
     }
+
+}
 
 
 
