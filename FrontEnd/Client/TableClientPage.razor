@@ -3,6 +3,10 @@
 @using FrontEnd.Models
 @using System.Net.Http.Json
 @inject HttpClient httpClient
+@inject MudBlazor.ISnackbar Snackbar
+@inject NavigationManager NavigationManager
+
+<MudButton OnClick="@(() => ToNewClient())">Adiconar nova Materia Prima</MudButton>
 
 <MudTable Items="@Clients" Dense="@dense" Hover="@hover" Bordered="@bordered" Striped="@striped" Filter="new Func<Client, bool>(FilterFunc1)" @bind-SelectedItem="selectedClient">
     <ToolBarContent>
@@ -22,11 +26,11 @@
         <MudTd DataLabel="Nome">@context.Name</MudTd>
         <MudTd DataLabel="CPF">@context.Cpf</MudTd>
         <MudTd DataLabel="Endereço">@context.Address</MudTd>
-        <MudTd DataLabel="Telefone">@context.PhoneNumber</MudTd>
+        <MudTd DataLabel="Telefone">@context.Telephone</MudTd>
         <MudTd DataLabel="Email">@context.Email</MudTd>
         <MudTd DataLabel="Ações">
-            <MudButton Variant="Variant.Filled" Color="Color.Primary" Class="mr-2">Editar</MudButton>
-            <MudButton Variant="Variant.Outlined" Color="Color.Error">Deletar</MudButton>
+        <MudTd DataLabel=""><MudButton OnClick="@(() => OnEditById(context.Id))">Editar</MudButton></MudTd>
+        <MudTd DataLabel=""><MudButton OnClick="@(() => OnDeleteById(context.Id))">Deletar</MudButton></MudTd>
         </MudTd>
     </RowTemplate>
     <PagerContent>
@@ -59,7 +63,7 @@
     {
         try
         {
-            Clients = await httpClient.GetFromJsonAsync<IEnumerable<Client>>("https://localhost:7008/Clients/all");
+            Clients = await httpClient.GetFromJsonAsync<IEnumerable<Client>>("https://localhost:7008/api/Clients?query=busca");
         }
         catch (Exception ex)
         {
@@ -82,6 +86,34 @@
                (client.Cpf?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false) ||
                (client.Address?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false) ||
                (client.Email?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false) ||
-               (client.PhoneNumber?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false);
+               (client.Telephone?.Contains(searchString, StringComparison.OrdinalIgnoreCase) ?? false);
+    }
+
+    private async Task OnEditById(int id)
+    {
+        NavigationManager.NavigateTo($"/Client/edit/{id}");
+    }
+    private async Task ToNewClient()
+    {
+        NavigationManager.NavigateTo($"/Client/new");
+    }
+
+
+    private async Task OnDeleteById(int id)
+    {
+        var response = await httpClient.DeleteAsync($"https://localhost:7008/api/Clients/{id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            Clients = Clients.Where(e => e.Id != id).ToList();
+
+            Snackbar.Add("Produto deletado com sucesso!", MudBlazor.Severity.Success);
+
+            StateHasChanged();
+        }
+        else
+        {
+            Snackbar.Add("Erro ao deletar o produto.", MudBlazor.Severity.Error);
+        }
     }
 }

@@ -19,7 +19,7 @@ namespace FrontEnd.Models
 
         [Required(ErrorMessage = "O número de telefone é obrigatório.")]
         [Phone(ErrorMessage = "Número de telefone inválido.")]
-        public string PhoneNumber { get; set; }
+        public string Telephone { get; set; }
 
         [Required(ErrorMessage = "O e-mail é obrigatório.")]
         [EmailAddress(ErrorMessage = "E-mail inválido.")]

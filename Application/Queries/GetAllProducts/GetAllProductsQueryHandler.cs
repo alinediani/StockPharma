@@ -21,6 +21,7 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, L
             p.Name, 
             p.Description,
             p.ProductRawMaterials.Select(rm => new ProductRawMaterialViewModel(
+                rm.Id,
                 rm.RawMaterialId,
                 rm.RawMaterial.Name,
                 rm.Quantity

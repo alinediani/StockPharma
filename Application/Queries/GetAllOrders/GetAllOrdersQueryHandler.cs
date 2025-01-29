@@ -27,6 +27,7 @@ public class GetAllOrdersQueryHandler : IRequestHandler<GetAllOrdersQuery, List<
                 o.Client.Email // Email do cliente
             ),
             o.OrderProducts.Select(p => new OrderProductViewModel(
+                p.Id,
                 p.ProductId, // ID do produto
                 p.Product.Name, // Nome do produto
                 p.Quantity // Quantidade do produto

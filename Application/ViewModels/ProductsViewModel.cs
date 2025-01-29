@@ -25,15 +25,17 @@ namespace Application.ViewModels
 
     public class ProductRawMaterialViewModel
     {
-        public ProductRawMaterialViewModel(int rawMaterialId, string rawMaterialName, float quantity)
+        public ProductRawMaterialViewModel(int id, int rawMaterialId, string rawMaterialName, float quantity)
         {
+            Id = id;
             RawMaterialId = rawMaterialId;
             RawMaterialName = rawMaterialName;
             Quantity = quantity;
         }
 
+        public int Id { get; set; }
         public int RawMaterialId { get; set; }
         public string RawMaterialName { get; set; }
-        public float Quantity { get; set; } // Quantidade da matéria-prima usada no produto
+        public float Quantity { get; set; } 
     }
 }

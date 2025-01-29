@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Persistence.Migrations
 {
     [DbContext(typeof(StockPharmaDbContext))]
-    [Migration("20250128223650_SPMigrations")]
+    [Migration("20250129021258_SPMigrations")]
     partial class SPMigrations
     {
         /// <inheritdoc />
@@ -89,6 +89,12 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Core.Entities.OrderProductEntity", b =>
                 {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
@@ -98,7 +104,9 @@ namespace Infrastructure.Persistence.Migrations
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
-                    b.HasKey("OrderId", "ProductId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("OrderId");
 
                     b.HasIndex("ProductId");
 
@@ -136,16 +144,24 @@ namespace Infrastructure.Persistence.Migrations
 
             modelBuilder.Entity("Core.Entities.ProductRawMaterialEntity", b =>
                 {
-                    b.Property<int>("ProductId")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("RawMaterialId")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<float>("Quantity")
                         .HasColumnType("real");
 
-                    b.HasKey("ProductId", "RawMaterialId");
+                    b.Property<int>("RawMaterialId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProductId");
 
                     b.HasIndex("RawMaterialId");
 

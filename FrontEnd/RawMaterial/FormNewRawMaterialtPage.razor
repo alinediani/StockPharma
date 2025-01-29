@@ -3,6 +3,8 @@
 @using FrontEnd.Models
 @using FrontEnd.Enums
 @inject HttpClient httpClient
+@inject MudBlazor.ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 
 <h3>Cadastro de novo produto</h3>
 
@@ -78,10 +80,12 @@
                 success = true;
                 
                 novaMateria = new RawMaterial();
+                Snackbar.Add("Produto adicionado com sucesso!", MudBlazor.Severity.Success);
             }
             else
             {
                 error = true;
+                Snackbar.Add("Erro ao adicionar Produto", MudBlazor.Severity.Error);
             }
         }
         catch (Exception)

@@ -88,13 +88,15 @@ namespace Infrastructure.Persistence.Migrations
                 name: "ProductRawMaterials",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     RawMaterialId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<float>(type: "real", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ProductRawMaterials", x => new { x.ProductId, x.RawMaterialId });
+                    table.PrimaryKey("PK_ProductRawMaterials", x => x.Id);
                     table.ForeignKey(
                         name: "FK_ProductRawMaterials_Products_ProductId",
                         column: x => x.ProductId,
@@ -113,13 +115,15 @@ namespace Infrastructure.Persistence.Migrations
                 name: "OrderProducts",
                 columns: table => new
                 {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
                     Quantity = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OrderProducts", x => new { x.OrderId, x.ProductId });
+                    table.PrimaryKey("PK_OrderProducts", x => x.Id);
                     table.ForeignKey(
                         name: "FK_OrderProducts_Orders_OrderId",
                         column: x => x.OrderId,
@@ -135,6 +139,11 @@ namespace Infrastructure.Persistence.Migrations
                 });
 
             migrationBuilder.CreateIndex(
+                name: "IX_OrderProducts_OrderId",
+                table: "OrderProducts",
+                column: "OrderId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_OrderProducts_ProductId",
                 table: "OrderProducts",
                 column: "ProductId");
@@ -143,6 +152,11 @@ namespace Infrastructure.Persistence.Migrations
                 name: "IX_Orders_ClientId",
                 table: "Orders",
                 column: "ClientId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ProductRawMaterials_ProductId",
+                table: "ProductRawMaterials",
+                column: "ProductId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ProductRawMaterials_RawMaterialId",

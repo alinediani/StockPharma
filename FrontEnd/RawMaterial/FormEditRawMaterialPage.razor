@@ -3,6 +3,8 @@
 @using FrontEnd.Models
 @using FrontEnd.Enums
 @inject HttpClient httpClient
+@inject MudBlazor.ISnackbar Snackbar
+@inject NavigationManager NavigationManager
 
 <h3>Editar Produto</h3>
 
@@ -78,10 +80,12 @@
             if (response != null)
             {
                 novaMateria = response;
+                Snackbar.Add("Materia prima editada com sucesso!", MudBlazor.Severity.Success);
             }
             else
             {
                 error = true;
+                Snackbar.Add("Erro ao editar materia prima com sucesso!", MudBlazor.Severity.Success);
             }
         }
         else
@@ -101,11 +105,13 @@
 
             if (response.IsSuccessStatusCode)
             {
+                Snackbar.Add("Materia prima adicionada com sucesso!", MudBlazor.Severity.Success);
                 success = true;
             }
             else
             {
                 error = true;
+                Snackbar.Add("Erro ao editar materia prima!", MudBlazor.Severity.Error);
             }
         }
         catch (Exception)

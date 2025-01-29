@@ -26,13 +26,15 @@ namespace Application.ViewModels
 
     public class OrderProductViewModel
     {
-        public OrderProductViewModel(int productId, string productName, int quantity)
+        public OrderProductViewModel(int id, int productId, string productName, int quantity)
         {
+            Id = id;
             ProductId = productId;
             ProductName = productName;
             Quantity = quantity;
         }
 
+        public int Id { get; set; }
         public int ProductId { get; set; }
         public string ProductName { get; set; }
         public int Quantity { get; set; }

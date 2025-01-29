@@ -32,6 +32,7 @@ namespace Application.Queries.GetOrderById
                     order.Client.Telephone,
                     order.Client.Email),
                 order.OrderProducts.Select(op => new OrderProductViewModel(
+                    op.Id,
                     op.Product.Id,               // ID do produto
                     op.Product.Name,             // Nome do produto
                     op.Quantity                  // Quantidade do produto no pedido

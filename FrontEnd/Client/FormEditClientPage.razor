@@ -1,0 +1,107 @@
+﻿@page "/Client/edit/{ClientId:int}"
+
+@using FrontEnd.Models
+@inject HttpClient httpClient
+
+<h3>Editar Cliente</h3>
+
+<EditForm Model="@selectedClient" OnValidSubmit="OnValidSubmit">
+    <DataAnnotationsValidator />
+    <MudGrid>
+        <MudItem xs="12" sm="7">
+            <MudCard>
+                <MudCardContent>
+                    <MudTextField Label="Nome" HelperText="Min. 4 caracteres"
+                                  @bind-Value="selectedClient.Name" For="@(() => selectedClient.Name)" />
+                    <MudTextField Label="CPF" HelperText="Adicione um CPF válido" 
+                                  @bind-Value="selectedClient.Cpf" For="@(() => selectedClient.Cpf)" />
+                    <MudTextField Label="Endereço" HelperText="Informe o endereço completo"
+                                  @bind-Value="selectedClient.Address" For="@(() => selectedClient.Address)" />
+                    <MudTextField Label="Telefone" HelperText="Adicione um telefone válido" 
+                                  @bind-Value="selectedClient.Telephone" For="@(() => selectedClient.Telephone)" />
+                    <MudTextField Label="Email" HelperText="Adicione um email válido"
+                                  @bind-Value="selectedClient.Email" For="@(() => selectedClient.Email)" />
+                </MudCardContent>
+                <MudCardActions>
+                    <MudButton ButtonType="ButtonType.Submit" Variant="Variant.Filled" Color="Color.Primary" Class="ml-auto">Atualizar</MudButton>
+                </MudCardActions>
+            </MudCard>
+        </MudItem>
+
+        <MudItem xs="12" sm="5">
+            <MudPaper Class="pa-4 mud-height-full">
+                <MudText Typo="Typo.subtitle2">Resumo de Validação</MudText>
+                @if (success)
+                {
+                    <MudText Color="Color.Success">Cliente atualizado com sucesso!</MudText>
+                }
+                else if (error)
+                {
+                    <MudText Color="Color.Error">Ocorreu um erro ao atualizar o cliente.</MudText>
+                }
+                else
+                {
+                    <MudText Color="Color.Error">
+                        <ValidationSummary />
+                    </MudText>
+                }
+            </MudPaper>
+        </MudItem>
+    </MudGrid>
+</EditForm>
+
+@code {
+    [Parameter] public int ClientId { get; set; }  // ID do cliente
+    private Client selectedClient = new Client();
+    private bool success = false;
+    private bool error = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Carregar os dados do cliente do servidor com base no ID
+        try
+        {
+            var response = await httpClient.GetFromJsonAsync<Client>($"https://localhost:7008/api/Clients/{ClientId}");
+
+            if (response != null)
+            {
+                selectedClient = response;
+            }
+            else
+            {
+                error = true;
+            }
+        }
+        catch (Exception ex)
+        {
+            error = true; // Caso haja erro na chamada da API
+            Console.WriteLine($"Erro ao carregar o cliente: {ex.Message}");
+        }
+    }
+
+    private async Task OnValidSubmit(EditContext context)
+    {
+        success = false;
+        error = false;
+
+        try
+        {
+            var response = await httpClient.PutAsJsonAsync($"https://localhost:7008/api/Clients/{selectedClient.Id}", selectedClient);
+
+            if (response.IsSuccessStatusCode)
+            {
+                success = true;
+            }
+            else
+            {
+                error = true;
+            }
+        }
+        catch (Exception)
+        {
+            error = true;
+        }
+
+        StateHasChanged();
+    }
+}

@@ -1,7 +1,8 @@
 ﻿namespace Core.Entities
 {
-    public class OrderProductEntity
+    public class OrderProductEntity 
     {
+        public int Id { get; set; }
         public int OrderId { get; set; }
         public OrderEntity Order { get; set; }
 
