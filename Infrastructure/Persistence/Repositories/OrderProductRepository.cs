@@ -20,6 +20,7 @@ namespace Infrastructure.Persistence.Repositories
 
         public async Task AddOrderProductAsync(OrderProductEntity orderProduct)
         {
+            orderProduct.Id = 0;
             await _dbContext.OrderProducts.AddAsync(orderProduct);
             await _dbContext.SaveChangesAsync();
         }
