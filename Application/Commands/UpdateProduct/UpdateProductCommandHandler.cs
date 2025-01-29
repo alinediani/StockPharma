@@ -71,6 +71,3 @@ namespace Application.Commands.UpdateProduct
 
 }
 
-
-
-}
