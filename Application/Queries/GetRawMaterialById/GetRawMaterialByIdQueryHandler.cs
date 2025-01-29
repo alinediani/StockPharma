@@ -30,8 +30,13 @@ namespace Application.Queries.GetRawMaterialById
                 rawMaterial.SupplierId,
                 rawMaterial.Amount,
                 rawMaterial.UoM,
-                rawMaterial.Expiration
-                );
+                rawMaterial.Expiration,
+                rawMaterial.ProductRawMaterials.Select(rm => new ProductRawMaterialViewModel(
+                    rm.RawMaterialId,
+                    rm.RawMaterial.Name,
+                    rm.Quantity
+                )).ToList()
+            );
 
             return rawMaterialsViewModel;
         }
