@@ -2,7 +2,7 @@
 {
     public class ProductRawMaterialEntity
     {
-        public int Id { get; set; }
+        public int ProductRawMaterialId { get; set; }
         public int ProductId { get; set; }
         public ProductEntity Product { get; set; }
 

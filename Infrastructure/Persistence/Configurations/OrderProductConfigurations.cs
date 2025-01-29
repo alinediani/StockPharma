@@ -8,21 +8,22 @@ namespace Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<OrderProductEntity> builder)
         {
-            builder.HasKey(op => op.Id);
+            builder.HasKey(op => op.Id); // Define 'Id' como chave primária
 
             builder.Property(op => op.Id)
-                   .ValueGeneratedOnAdd();
+                   .ValueGeneratedOnAdd(); // Auto-incremento para SQL Server
 
             builder.HasOne(op => op.Order)
                    .WithMany(o => o.OrderProducts)
                    .HasForeignKey(op => op.OrderId)
                    .OnDelete(DeleteBehavior.Cascade);
 
-
             builder.HasOne(op => op.Product)
                    .WithMany(p => p.OrderProducts)
                    .HasForeignKey(op => op.ProductId)
-                   .OnDelete(DeleteBehavior.Cascade); 
+                   .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasIndex(op => new { op.OrderId, op.ProductId }).IsUnique();
         }
     }
 }

@@ -8,10 +8,12 @@ namespace Infrastructure.Persistence.Configurations
     {
         public void Configure(EntityTypeBuilder<ProductRawMaterialEntity> builder)
         {
-            builder.HasKey(pr => pr.Id);
+            builder.HasKey(pr => pr.ProductRawMaterialId);
 
-            builder.Property(pr => pr.Id)
-                   .ValueGeneratedOnAdd(); 
+            builder.Property(pr => pr.ProductRawMaterialId)
+                .ValueGeneratedOnAdd(); 
+
+            builder.HasIndex(pr => new { pr.ProductId, pr.RawMaterialId }).IsUnique();
 
             builder.HasOne(pr => pr.Product)
                    .WithMany(p => p.ProductRawMaterials)
