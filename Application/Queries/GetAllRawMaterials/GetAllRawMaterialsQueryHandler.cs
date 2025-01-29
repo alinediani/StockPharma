@@ -31,7 +31,6 @@ namespace Application.Queries.GetAllRawMaterials
                 r.UoM, // Unidade de medida
                 r.Expiration, // Data de expiração
                 r.ProductRawMaterials.Select(rm => new ProductRawMaterialViewModel(
-                    rm.ProductRawMaterialId,
                     rm.RawMaterialId, // ID da matéria-prima no produto
                     rm.RawMaterial.Name, // Nome da matéria-prima no produto
                     rm.Quantity // Quantidade utilizada no produto
