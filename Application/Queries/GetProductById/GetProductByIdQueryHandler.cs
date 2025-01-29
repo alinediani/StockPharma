@@ -27,7 +27,7 @@ namespace Application.Queries.GetProductById
                 product.Name,
                 product.Description,
                 product.ProductRawMaterials.Select(rm => new ProductRawMaterialViewModel(
-                    rm.Id,
+                    rm.ProductRawMaterialId,
                     rm.RawMaterialId,
                     rm.RawMaterial.Name,
                     rm.Quantity
