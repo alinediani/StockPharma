@@ -25,13 +25,6 @@ namespace Application.Queries.GetProductById
             var productsViewModel = new ProductsViewModel(
                 product.Id,
                 product.Name,
-                product.Description,
-                product.ProductRawMaterials.Select(rm => new ProductRawMaterialViewModel(
-                    rm.ProductRawMaterialId,
-                    rm.RawMaterialId,
-                    rm.RawMaterial.Name,
-                    rm.Quantity
-                )).ToList(),
                 product.Price,
                 product.Amount
             );

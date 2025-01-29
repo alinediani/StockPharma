@@ -1,4 +1,5 @@
-﻿using Core.Entities;
+﻿using Application.ViewModels;
+using Core.Entities;
 using MediatR;
 using System;
 using System.Collections.Generic;
@@ -17,5 +18,6 @@ namespace Application.Commands.UpdateProduct
         public double Price { get; set; }
         public int Amount { get; set; }
     }
+
 
 }

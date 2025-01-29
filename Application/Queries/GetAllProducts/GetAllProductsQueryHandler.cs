@@ -18,14 +18,7 @@ public class GetAllProductsQueryHandler : IRequestHandler<GetAllProductsQuery, L
 
         var productsViewModel = products.Select(p => new ProductsViewModel(
             p.Id, 
-            p.Name, 
-            p.Description,
-            p.ProductRawMaterials.Select(rm => new ProductRawMaterialViewModel(
-                rm.ProductRawMaterialId,
-                rm.RawMaterialId,
-                rm.RawMaterial.Name,
-                rm.Quantity
-            )).ToList(),
+            p.Name,
             p.Price,
             p.Amount
         )).ToList();
